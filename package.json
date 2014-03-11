@@ -1,0 +1,25 @@
+{
+  "name": "ineffective-messenger",
+  "version": "0.0.1",
+  "description": "Node.js instant messenger that doesn't work very well",
+  "main": "server.js",
+  "dependencies": {
+    "socket.io": "~0.9.16",
+    "express": "~4.0.0-rc2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evanbrooks/Ineffective-Messenger.git"
+  },
+  "author": "evan-brooks",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/evanbrooks/Ineffective-Messenger/issues"
+  },
+  "homepage": "https://github.com/evanbrooks/Ineffective-Messenger"
+}
