@@ -1,9 +1,11 @@
 .minicolors {
 	position: relative;
+	height: 1em;
+	white-space: nowrap;
 }
 
 .minicolors-swatch {
-	position: absolute;
+	// position: absolute;
 	vertical-align: middle;
 	background: url(jquery.minicolors.png) -80px 0;
 	border: solid 1px #ccc;
@@ -14,11 +16,11 @@
 }
 
 .minicolors-swatch-color {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
+	// position: absolute;
+	// top: 0;
+	// left: 0;
+	// right: 0;
+	// bottom: 0;
 }
 
 .minicolors input[type=hidden] + .minicolors-swatch {

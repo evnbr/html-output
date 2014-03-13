@@ -6,7 +6,15 @@ $edit = document.getElementById("edit");
 
 socket.on('message', function(msg) {
   if (msg.ID !== socket_id) {
-    insert_css("test", msg.css);
+    if (msg.css) {
+      insert_css("test", msg.css);
+    }
+    else if (msg.highlight) {
+      highlight(msg.highlight);
+    }
+    else if (msg.unhighlight) {
+      unhighlight(msg.unhighlight);
+    }
   }
 });
 
@@ -17,6 +25,38 @@ function send() {
     "ID": socket_id
   });
 }
+
+function send_highlight(s) {
+  socket.emit('message', {
+    "highlight": s,
+    "ID": socket_id
+  });
+}
+
+function clear_highlight(s) {
+  socket.emit('message', {
+    "unhighlight": s,
+    "ID": socket_id
+  });
+}
+
+
+function highlight(s) {
+  var els = document.querySelectorAll(s);
+  console.log(els);
+  for (var i = 0; i < els.length; i++) {
+    els[i].style.outline = "2px dotted magenta";
+  }
+}
+
+function unhighlight(s) {
+  var els = document.querySelectorAll(s);
+  console.log(els);
+  for (var i = 0; i < els.length; i++) {
+    els[i].style.outline = "";
+  }
+}
+
 
 if ($edit) {
   $edit.addEventListener("keyup", function(e){
@@ -51,6 +91,18 @@ if ($edit) {
               else if (words[j] == "28px/1.25") {
                 words[j] = '<input type="range" value="28" min="0" max="50" step="1"/> <span class="rangeafter">28</span>px/1.25';
               }
+              else if (words[j] == ".intro") {
+                words[j] = '<span data-selector>.intro</span>';
+              }
+              else if (words[j] == "body") {
+                words[j] = '<span data-selector>body</span>';
+              }
+              else if (words[j] == "#content") {
+                words[j] = '<span data-selector>#content</span>';
+              }
+              else if (words[j] == "a:link,") {
+                words[j] = '<span data-selector>a:link</span>,';
+              }
             }
             lines[i] = words.join(" ");
           }
@@ -70,6 +122,14 @@ if ($edit) {
           $("input[type=range]").mousemove(function(e){
             $(this).next().html( $(this).val() );
               send();
+          });
+
+          $("[data-selector]").hover(function(e){
+            var s = this.innerText;
+            send_highlight(s);
+          }, function(e){
+            var s = this.innerText;
+            clear_highlight(s);
           });
 
       }
