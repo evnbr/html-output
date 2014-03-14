@@ -45,6 +45,11 @@ function Slider(el) {
   var strtval = 0;
   var step = 1;
 
+  $el.attr("contenteditable", false);
+  $rail.attr("contenteditable", false);
+  $thumb.attr("contenteditable", false);
+
+
   $thumb.mousedown(function(e){
     dragging = true;
     $el.addClass("dragging");
@@ -64,7 +69,7 @@ function Slider(el) {
 
       val = parseInt(strtval - parseInt(delt.y * 0.1) * step);
 
-      $el.next().html(val);
+      $val.html(val);
       send();
 
       $rail.css({
@@ -86,14 +91,14 @@ function Slider(el) {
     if (e.keyCode == 38) {
       e.preventDefault();
       val += step;
-      $el.next().html(val);
+      $val.html(val);
       send();
     }
     // DOWN KEY
     else if (e.keyCode == 40) {
       e.preventDefault();
       val -= step;
-      $el.next().html(val);
+      $val.html(val);
       send();
     }
 
@@ -180,7 +185,7 @@ if ($edit) {
                 });
                 words[j].str = words[j].str.replace(words[j].str.trim(), '<span data-selector>' + sel + '</span>');
               }
-              
+
               else if (words[j].numerical) {
                 var str = words[j].str.trim();
                 var val = parseFloat(str);
@@ -224,6 +229,9 @@ if ($edit) {
               }
               else if (words[j].str == "white;") {
                 words[j].str = '<input class="color" type="text" value="#fff">;';
+              }
+              else if (words[j].str == "blue;") {
+                words[j].str = '<input class="color" type="text" value="#00f">;';
               }
               // else if (words[j].str == "2em;") {
               //   words[j].str = '<input type="range" value="2" min="0" max="30" step="0.1"/> <span class="rangeafter">2</span>em;';
