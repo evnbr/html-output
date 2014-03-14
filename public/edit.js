@@ -25,6 +25,84 @@ function clear_highlight(s) {
   });
 }
 
+// ================
+
+
+function Slider(el) {
+  var self = this;
+  var $el = $(el);
+
+  $el.attr("tabindex", 0);
+  $el.html('<div class="slider-rail"></div><div class="slider-thumb"></div>');
+
+  var $rail = $el.find(".slider-rail");
+  var $thumb = $el.find(".slider-thumb");
+  var $val = $el.next();
+  var dragging = false;
+  var start = {x:0, y:0};
+  var delt = {x:0, y:0};
+  var val = 0;
+  var strtval = 0;
+  var step = 1;
+
+  $thumb.mousedown(function(e){
+    dragging = true;
+    $el.addClass("dragging");
+    $("body").addClass("dragging");
+    $("#edit").attr("contenteditable", false);
+    start.x = e.clientX;
+    start.y = e.clientY;
+    delt.x = 0;
+    delt.y = 0;
+    val = parseInt($el.next().html());
+    strtval = val;
+  });
+  $("html").mousemove(function(e){
+    if (dragging) {
+      delt.x = e.clientX - start.x;
+      delt.y = e.clientY - start.y;
+
+      val = parseInt(strtval - parseInt(delt.y * 0.1) * step);
+
+      $el.next().html(val);
+      send();
+
+      $rail.css({
+        "-webkit-transform": "translate3d(0, " + delt.y + "px, 0)"
+      });
+    }
+  });
+  $("html").mouseup(function(){
+    dragging = false;
+    $("#edit").attr("contenteditable", true);
+    $(".dragging").removeClass("dragging");
+    $rail.css({
+      "-webkit-transform": ""
+    });
+  });
+
+  $el.keydown(function(e){
+    // UP KEY
+    if (e.keyCode == 38) {
+      e.preventDefault();
+      val += step;
+      $el.next().html(val);
+      send();
+    }
+    // DOWN KEY
+    else if (e.keyCode == 40) {
+      e.preventDefault();
+      val -= step;
+      $el.next().html(val);
+      send();
+    }
+
+  });
+}
+
+
+// =============
+
 
 if ($edit) {
   $edit.addEventListener("keyup", function(e){
@@ -67,7 +145,8 @@ if ($edit) {
               var arr = [];
               for (var j = 0; j < parts.length; j++) {
                 var is_number = false;
-                if (/([0-9]+([a-z]{2}|%))/.test(parts[j])) {
+                // if (/([0-9]+([a-z]{2}|%))/.test(parts[j])) {
+                if (/([0-9]+)/.test(parts[j])) {
                   is_number = true;
                 }
                 arr.push({
@@ -89,13 +168,23 @@ if ($edit) {
 
             for (var j = 0; j < words.length; j++) {
               if (words[j].sel) {
-                words[j].str = words[j].str.replace(words[j].str.trim(), '<span data-selector>' + words[j].str.trim() + '</span>');
+                var sel = words[j].str.trim();
+                sel = sel.replace(/(\s|^)([\*a-zA-Z]+[1-7]{0,1})/g, function(match, grp){
+                  return '<span class="sel-name">' + match + '</span>';
+                });
+                sel = sel.replace(/#([a-zA-Z]*)/, function(match, grp){
+                  return '<span class="sel-id">' + match + '</span>';
+                });
+                sel = sel.replace(/(\.-?[_a-zA-Z]+[_a-zA-Z0-9-]*)/g, function(match, grp){
+                  return '<span class="sel-class">' + match + '</span>';
+                });
+                words[j].str = words[j].str.replace(words[j].str.trim(), '<span data-selector>' + sel + '</span>');
               }
+              
               else if (words[j].numerical) {
                 var str = words[j].str.trim();
                 var val = parseFloat(str);
                 var min, max, step, unit;
-                console.log(val);
                 if (str.indexOf("em") !== -1) {
                   min = -2;
                   max = 10;
@@ -121,7 +210,12 @@ if ($edit) {
                   unit = "%";
                 }
 
-                var input = '<input type="range" value="' + val + '" min="' + min + '" max="' + max + '" step="' + step + '"/> <span class="rangeDat">' + val + '</span>';
+                // var input = '<input type="range" value="' + val + '" min="' + min + '" max="' + max + '" step="' + step + '"/> <span class="rangeDat">' + val + '</span>';
+
+
+                var input = '<span class="slider"></span><span class="slider-val">' + val + '</span>';
+
+
 
                 words[j].str = words[j].str.replace(val, input );
               }
@@ -147,6 +241,8 @@ if ($edit) {
 
           document.getElementById("edit").innerHTML = html;
 
+
+
           $(".color").minicolors({
             opacity: false,
             change: function(hex, opacity) {
@@ -154,11 +250,23 @@ if ($edit) {
               send();
             }
           });
-
-          $("input[type=range]").on("mousemove change", function(e){
-            $(this).next().html( $(this).val() );
-              send();
+          $(".color").each(function(){
+            this.parentNode.querySelector(".minicolors-swatch-color").innerText = this.value;
           });
+
+
+
+          // $("input[type=range]").on("mousemove change", function(e){
+          //   $(this).next().html( $(this).val() );
+          //     send();
+          // });
+
+
+          var sliders = document.querySelectorAll(".slider");
+          for (var i = 0; i < sliders.length; i++) {
+            new Slider(sliders[i]);
+          }
+
 
           $("[data-selector]").hover(function(e){
             var s = this.innerText;

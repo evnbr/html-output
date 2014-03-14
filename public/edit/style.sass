@@ -53,6 +53,78 @@ h2
 	.minicolors-theme-default .minicolors-swatch:active
 		// -webkit-transform: scale(0.8)
 
+
+[class^="sel"]
+	font-weight: 500
+
+.sel-id
+	color: #CCA258 // #61B3E5
+
+.sel-class
+	color: #CB886C
+
+.sel-name
+	color: #B18EB0
+
+
+header
+	padding: 2%
+
+.dragging
+	// color: rgba(white, 0.4) !important
+	cursor: ns-resize
+	*
+		-webkit-user-select: none !important
+
+
+.slider
+	display: inline-block
+	height: 11px
+	width: 2ch
+	position: relative
+	opacity: 0.4
+	-webkit-transition: all 0.1s
+	cursor: ns-resize
+	-webkit-user-select: none
+	&:focus
+		opacity: 1
+		outline: none
+		.slider-rail
+			background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(yellow,0)), color-stop(50%,rgba(yellow,1)), color-stop(100%,rgba(yellow,0))) //$color
+		.slider-thumb
+			border-color: yellow
+		& + span
+			color: yellow
+	&:hover
+		opacity: 1
+		.slider-rail
+			height: 50px
+			top: -20px
+	&.dragging
+		opacity: 1
+		.slider-rail
+			height: 200px
+			top: -95px
+			-webkit-transition: 0
+
+.slider-thumb
+	height: 11px
+	width: 11px
+	border: 1px solid $color
+	border-radius: 50%
+	background: $bg
+	position: absolute
+
+.slider-rail
+	-webkit-transition: all 0.1s
+	height: 25px
+	width: 1px
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba($color,0)), color-stop(50%,rgba($color,1)), color-stop(100%,rgba($color,0))) //$color
+	position: absolute
+	top: -7px
+	left: 5px
+	margin: auto
+
 input[type="range"]
 	-webkit-appearance: none
 	height: 1px

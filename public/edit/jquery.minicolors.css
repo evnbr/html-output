@@ -8,11 +8,12 @@
 	// position: absolute;
 	vertical-align: middle;
 	background: url(jquery.minicolors.png) -80px 0;
-	border: solid 1px #ccc;
+	// border: solid 1px #ccc;
 	cursor: text;
 	padding: 0;
 	margin: 0;
-	display: inline-block;
+	// display: inline-block;
+	border-radius: 2px;
 }
 
 .minicolors-swatch-color {
@@ -21,6 +22,13 @@
 	// left: 0;
 	// right: 0;
 	// bottom: 0;
+	box-shadow: 0 0 0 1px rgba(255,255,255,0.15);
+	border-radius: 2px;
+	color: transparent;
+}
+
+.minicolors-swatch-color:hover {
+	box-shadow: 0 0 0 1px rgba(255,255,255,0.45);
 }
 
 .minicolors input[type=hidden] + .minicolors-swatch {
