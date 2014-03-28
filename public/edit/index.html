@@ -9,23 +9,71 @@
              initial-scale=1.0,
              maximum-scale=1.0,
              user-scalable=no"/>
+
+  <!-- App CSS -->
 	<link href="style.css" rel="stylesheet" type="text/css">
+
+  <!-- Libararies CSS -->
   <link rel='stylesheet' href='jquery.minicolors.css' />
+
+  <!-- CodeMirror CSS -->
+  <link rel="stylesheet" href="cm4.0/lib/codemirror.css">
+  <link rel="stylesheet" href="cm4.0/theme/loop-light.css">
+  <link rel="stylesheet" href="cm4.0/theme/loop-dark.css">
+  <link rel="stylesheet" href="cm4.0/addon/lint/lint.css">
+
+  <!-- Libaries JS -->
+  <script src="http://ajax.aspnetcdn.com/ajax/jshint/r07/jshint.js"></script>
+  <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script src='jquery.minicolors.js'></script>
+  <script src='husl.js'></script>
+  <script src="../socketio.min.js"></script>
+
+  <!-- CodeMirror JS -->
+  <script src="cm4.0/lib/codemirror.js"></script>
+  <script src="cm4.0/mode/javascript/javascript.js"></script>
+  <script src="cm4.0/addon/lint/lint.js"></script>
+  <script src="cm4.0/addon/lint/javascript-lint.js"></script>
+
 </head>
 
 <body>
 
-  <header>
+  <header class="nav">
+    <a href="#" data-action="theme">(Theme)</a>
+
+    <a href="#" data-tab="html">index.html</a>
+    <a href="#" data-tab="css">style.css</a>
+    <a href="#" data-tab="script" class="activetab">script.js</a>
   </header>
 
-	<pre id="edit" contenteditable autocorrect="off" spellcheck="false">
-  </pre>
+  <div class="tabs">
+    <div class="html tab">
+      <pre id="edithtml" class="editor" contenteditable autocorrect="off" spellcheck="false">
+  html goes here
+      </pre>
+    </div>
 
+    <div class="css tab">
+    	<pre id="edit" class="editor" contenteditable autocorrect="off" spellcheck="false">
+      </pre>
+    </div>
 
-  <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-  <script src='jquery.minicolors.js'></script>
-	<script src="../socketio.min.js"></script>
-	<script src="../edit.js"></script>
+    <div class="script tab active">
+      <header class="actions">
+        <a href="#" data-action="save">Save</a>
+      </header>
+
+      <textarea id="editscript" class="editor codemirror">
+test
+      </textarea>
+      <div class="error"></div>
+      <a href="#" class="btn" id="execute">Restart script</a>
+    </div>
+  </div>
+
+  <!-- App JS -->
+  <script src="main.js"></script>
 
 </body>
 </html>

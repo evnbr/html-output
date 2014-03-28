@@ -1,12 +1,129 @@
 var socket = io.connect('/');
 var socket_id = parseInt(Math.random() * 10000);
 
-$edit = document.getElementById("edit");
 
+// var editor = ace.edit("editscript");
+// editor.setTheme("ace/theme/dawn");
+// editor.getSession().setMode("ace/mode/javascript");
+// editor.getSession().setUseSoftTabs(true);
+// editor.setShowFoldWidgets(false);
+// // editor.setShowInvisibles(true);
+// document.getElementById('editscript').style.fontSize='14px';
+
+$edit = document.getElementById("edit");
+$editscript = document.getElementById("editscript");
+
+// ============
+
+// E D I T O R
+
+var editor = CodeMirror.fromTextArea($editscript, {
+  mode: "javascript",
+  tabSize: 2,
+  lineNumbers: true,
+  gutters: ["marginalia", "CodeMirror-lint-markers"],
+  lint: true,
+  theme: "loop"
+});
+
+
+// ===========
+
+// L I N T E R
+
+// var widgets = []
+// function updateHints() {
+//   editor.operation(function(){
+
+//     // Remove old errors
+//     for (var i = 0; i < widgets.length; ++i) {
+//       editor.removeLineWidget(widgets[i]);
+//     }
+//     widgets.length = 0;
+
+//     // Hint on current text
+//     JSHINT(editor.getValue());
+
+//     // For all returned errors
+//     for (var i = 0; i < JSHINT.errors.length; ++i) {
+//       var err = JSHINT.errors[i];
+//       if (!err) continue;
+
+//       // Create widget
+//       var msg = document.createElement("div");
+
+//       // Add icon
+//       var icon = msg.appendChild(document.createElement("span"));
+//       icon.innerHTML = "!!";
+//       icon.className = "lint-error-icon";
+
+//       // Add reason
+//       msg.appendChild(document.createTextNode(err.reason));
+
+//       // Insert widget
+//       msg.className = "lint-error";
+//       widgets.push(editor.addLineWidget(err.line - 1, msg, {coverGutter: false, noHScroll: true}));
+//     }
+//   });
+
+//   var info = editor.getScrollInfo();
+//   var after = editor.charCoords({line: editor.getCursor().line + 1, ch: 0}, "local").top;
+//   if (info.top + info.clientHeight < after)
+//     editor.scrollTo(null, after - info.clientHeight + 3);
+// }
+
+// ===========
+
+// H U S L p
+
+
+var css = "";
+for (var i = 0; i < 40; i++) {
+  var col = $.husl.p.toHex(((i / 40) * 360), 90, 60);
+  var className = ".cm-s-loop .cm-color-" + i;
+  css += className + " { color: " + col + "}\n"; 
+}
+add_style_sheet(css);
+
+
+
+// ===========
+
+
+var tabs = document.querySelectorAll("[data-tab]");
+for (var i = 0; i < tabs.length; i++ ) {
+  tabs[i].addEventListener("click",function(e){
+    e.preventDefault();
+  });
+  tabs[i].addEventListener("mousedown",function(e){
+    var activetab = document.querySelector(".activetab");
+    if (activetab) activetab.classList.remove("activetab");
+    this.classList.add("activetab");
+
+    var sel = "." + this.getAttribute("data-tab");
+    var active = document.querySelector(".active");
+    if (active) active.classList.remove("active");
+    document.querySelector(sel).classList.add("active");
+  }, false);
+}
+
+
+document.getElementById("execute").addEventListener("click", function(e){
+  e.preventDefault();
+  send_script();
+});
 
 function send() {
   socket.emit('message', {
     "css": $edit.innerText,
+    "ID": socket_id
+  });
+}
+
+function send_script() {
+  document.querySelector(".error").innerHTML = "";
+  socket.emit('message', {
+    "script": $editscript.innerText,
     "ID": socket_id
   });
 }
@@ -24,6 +141,18 @@ function clear_highlight(s) {
     "ID": socket_id
   });
 }
+
+// ================
+
+socket.on('message', function(msg) {
+  if (msg.ID !== socket_id) {
+    if (msg.error) {
+      var parts = msg.error.text.split(":");
+      var txt = '<span class="error-type">' + parts[0] + '</span>' + parts[1];
+      document.querySelector(".error").innerHTML = txt;
+    }
+  }
+});
 
 // ================
 
@@ -289,4 +418,23 @@ if ($edit) {
 
   xmlhttp.open("GET", "../sketch/style.css", true);
   xmlhttp.send();
+}
+
+// ==============================
+
+// DOM Utilities
+
+
+function add_style_sheet(css) {
+  var head, styleElement;
+  head = document.getElementsByTagName('head')[0];
+  styleElement = document.createElement('style');
+  styleElement.setAttribute('type', 'text/css');
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = css;
+  } else {
+    styleElement.appendChild(document.createTextNode(css));
+  }
+  head.appendChild(styleElement);
+  return styleElement;
 }

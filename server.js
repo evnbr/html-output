@@ -3,6 +3,7 @@ var express = require('express')
   , app = express()
   , socketServer = http.createServer(app)
   , io = require('socket.io').listen(socketServer)
+  , fs = require('fs')
   ;
 
 // function handler (req, res) {
@@ -21,6 +22,55 @@ var server = socketServer.listen(process.env.PORT || 3000, function() {
 
 io.sockets.on('connection', function (socket) {
   socket.on('message', function(message) {
-    io.sockets.emit('message', message);
+
+  	console.log("hello!");
+
+  	if (message.save && message.file_name) {
+
+  		console.log("someone is telling me to save " + message.file_name);
+  		save(message.file_name, message.text, message.ID);
+  	}
+  	if (message.open && message.file_name) {
+
+  		console.log("someone is telling me to open " + message.file_name);
+  		open(message.file_name, message.text, message.ID)
+  	}
+
+  	else {
+    	io.sockets.emit('message', message);
+	}
   });
 });
+
+
+
+function save(filename, text, id) {
+	fs.writeFile("public/sketch/" + filename, text, function(err) {
+	    if (err) {
+	        console.log(err);
+	    }
+	    else {
+	        console.log("The file was saved!");
+		    io.sockets.emit('message', {
+		    	confirm_save: true, 
+		    });
+	    }
+	}); 
+}
+
+function open(filename, id) {
+	fs.readFile('public/sketch/' + filename, 'utf8', function (err,data) {
+		if (err) {
+		    console.log(err);
+		}
+		else {
+		    io.sockets.emit('message', {
+		    	from_disk: true, 
+		    	file_name: filename,
+		    	content: data
+		    });
+			// console.log(data);
+		}
+	});
+}
+

@@ -1,25 +1,53 @@
 * 
 	margin: 0
 	padding: 0
-	// font: inherit
+	font: inherit
 	-webkit-box-sizing: border-box
+	box-sizing: border-box
+	font: inherit
+	// -webkit-font-smoothing: antialiased
+	text-rendering: optimizeLegibility
 
 $color: #A1B0C6
-$bg: #2F353F
+$bg: white //#2F353F
+
+body, html
+	overflow: hidden
+	height: 100%
 
 body
 	margin: 0px
-	padding: 10px
-	background: $bg
-	color: $color
+	// background: $bg
+	padding-top: 3em
+	color: #4C6770 //$color
 	// -webkit-transition: background 0.1s, color 0.1s
+	font: 400 14px/1.4 "Source Sans Pro"
 
+a:link, a:visited
+	color: inherit
 
-#edit
-	font: 400 14px/1.4 "Source Code Pro"
+.error
+	color: yellow
+	margin-bottom: 3em
+	min-height: 2em
+	opacity: 0.8
+	.error-type
+		display: none
+		//text-transform: uppercase
+		//font-size: 0.7rem
+		//letter-spacing: 1px
 
-#edit:focus
-	outline: none
+.actions
+	position: absolute
+	top: 0
+	right: 0
+	padding: 1em
+	z-index: 99
+	a
+		display: inline-block
+		text-decoration: none
+		padding: 1em 2em
+		border: 1px solid black
 
 h1
 	font-size: 3rem
@@ -34,8 +62,52 @@ h2
 		border-bottom: 1px solid white
 		color: white
 
-#edit
+.nav
+	// background: lighten($bg, 5)
+	position: fixed
+	z-index: 10
+	top: 0
+	left: 0
+	right: 0
+	border: 0
+	background: white
+	border-bottom: 1px solid #ddd
+	a
+		display: inline-block
+		padding: 0.8em 1.5em
+		text-decoration: none
+		opacity: 0.3
+	.activetab
+		opacity: 1
+
+
+.btn
+	display: inline-block
+	padding: 0.8em 1em
+	margin-bottom: 1em
+	background: lighten($bg, 5)
+	color: white
+	text-decoration: none
+
+
+.tabs
+	position: absolute
+	top: 0
+	right: 0
+	left: 0
+
+.tab
+	display: none
+	&.active
+		display: block
+
+
+.editor
+	font: 400 14px/1.8 "Consolas"
+	// letter-spacing: -1px
 	// color: rgba(white, 0.05)
+	&:focus
+		outline: none
 	.minicolors-theme-default .minicolors-input
 		width: 0
 		height: 0
@@ -53,9 +125,13 @@ h2
 	.minicolors-theme-default .minicolors-swatch:active
 		// -webkit-transform: scale(0.8)
 
+.marginalia
+	width: 10px
 
 [class^="sel"]
-	font-weight: 500
+	font-weight: 400
+	font-style: italic
+
 
 .sel-id
 	color: #CCA258 // #61B3E5
@@ -66,9 +142,6 @@ h2
 .sel-name
 	color: #B18EB0
 
-
-header
-	padding: 2%
 
 .dragging
 	// color: rgba(white, 0.4) !important
@@ -90,11 +163,11 @@ header
 		opacity: 1
 		outline: none
 		.slider-rail
-			background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(yellow,0)), color-stop(50%,rgba(yellow,1)), color-stop(100%,rgba(yellow,0))) //$color
+			background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(blue,0)), color-stop(50%,rgba(blue,1)), color-stop(100%,rgba(blue,0))) //$color
 		.slider-thumb
-			border-color: yellow
+			border-color: blue
 		& + span
-			color: yellow
+			color: blue
 	&:hover
 		opacity: 1
 		.slider-rail
@@ -155,3 +228,18 @@ input[type="range"]
 		&:hover
 			background: lighten($bg, 10)
 
+@media (min-width: 1500px)
+	body 
+		padding-top: 1em
+
+	.nav
+		width: 200px
+		bottom: 0
+		right: auto
+		border: 0
+		border-right: 1px solid #ddd
+		a
+			display: block
+
+	.tabs
+		padding-left: 200px

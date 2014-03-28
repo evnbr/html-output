@@ -7,6 +7,15 @@ socket.on('message', function(msg) {
     if (msg.css) {
       insert_css("test", msg.css);
     }
+    else if (msg.script) {
+      var node = document.getElementsByTagName("head")[0] || document.body;
+      if (node) {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.text = msg.script;
+        node.appendChild(script);
+      }
+    }
     else if (msg.highlight) {
       highlight(msg.highlight);
     }
@@ -15,6 +24,15 @@ socket.on('message', function(msg) {
     }
   }
 });
+
+window.onerror = function(msg, url, line){
+  socket.emit('message', {
+    error: {
+      text: msg,
+      line: line
+    }
+  });
+};
 
 
 function highlight(s) {
