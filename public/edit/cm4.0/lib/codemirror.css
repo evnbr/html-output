@@ -2,11 +2,6 @@
 
 .CodeMirror {
   /* Set height, width, borders, and global font properties here */
-  color: #535353;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  height: 100vh;
 }
 
 .CodeMirror-scroll {
@@ -39,7 +34,7 @@
   padding: 0 15px 0 0px;
   min-width: 20px;
   text-align: right;
-  color: #bbb;
+  color: transparent;
   font-size: 60%;
   -moz-box-sizing: content-box;
   box-sizing: content-box;

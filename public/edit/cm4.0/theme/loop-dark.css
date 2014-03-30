@@ -34,6 +34,8 @@
 .cm-s-base16-light .CodeMirror-matchingbracket { text-decoration: underline; color: white !important;}
 */
 
+
+
 .cm-s-loop-dark.CodeMirror {
 	color: #999; //#747A8B;
 	font: 14px/1.4 "Consolas";
@@ -49,11 +51,11 @@
 }
 
 .cm-s-loop-dark .cm-atom {
-  color: #54B1E5;
+  color: #76B4EC;
   font-weight: bold;
 }
 .cm-s-loop-dark .cm-number {
-  color: #54B1E5;
+  color: #76B4EC;
   font-weight: bold;
 }
 .cm-s-loop-dark .cm-def {
@@ -85,7 +87,7 @@
   letter-spacing: 0.02em;
 }
 .cm-s-loop-dark .cm-string {
-  color: #54B1E5;
+  color: #76B4EC;
 }
 
 /* REGEX */

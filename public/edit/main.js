@@ -13,26 +13,184 @@ var socket_id = parseInt(Math.random() * 10000);
 $edit = document.getElementById("edit");
 $editscript = document.getElementById("editscript");
 
+var $tab_nav = document.getElementById("tab_nav");
+var $tab_content = document.getElementById("tab_content");
+
 
 // ========================
 
-// E D I T O R
+var nav = {};
+var curr_tab;
 
-var cm_script = CodeMirror.fromTextArea($editscript, {
-  mode: "javascript",
-  tabSize: 2,
-  lineNumbers: false,
-  lineWrapping: false,
-  gutters: ["CodeMirror-lint-markers"],
-  lint: true,
-  theme: "loop-light"
+var file_arr = [
+  "index.html",
+  "style.css",
+  "script.js"
+];
+
+for (var i = 0; i < file_arr.length; i++) {
+  make_tab(file_arr[i]);
+}
+
+
+
+function make_tab(filename) {
+
+  var ext = filename.split(".")[1];
+  var mode = get_mode_from_extension(ext);
+  var escaped = filename.replace(".","_");
+
+  var tab = document.createElement("a");
+  tab.setAttribute("href", "#");
+  tab.setAttribute("data-tab", escaped); 
+  tab.innerText = filename;
+
+  tab_nav.appendChild(tab);
+
+  var tab_panel = document.createElement("div");
+  tab_panel.className = escaped + " tab";
+  tab_content.appendChild(tab_panel);
+
+
+  var editor = CodeMirror(function(elt) {
+    tab_panel.appendChild(elt);
+  },
+  {
+    mode: mode,
+    tabSize: 2,
+    styleActiveLine: true,
+    lineNumbers: true,
+    lineWrapping: true,
+    gutters: ["CodeMirror-lint-markers"],
+    lint: (mode == "javascript"),
+    // extraKeys: {"Ctrl-Space": "autocomplete"},
+    extraKeys: {
+      "Tab": function(cm) {
+        var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
+        cm.replaceSelection(spaces);
+      },
+      "Cmd-S": function(cm) {
+        save(curr_tab.title, curr_tab.cm.getValue());
+      },
+      "Cmd-1": function(cm) {
+        cm.setBookmark(cm.getCursor(), {
+          widget: get_slider()
+        });
+      }
+    },
+    theme: "loop-light"
+  });
+
+  var timeout;
+  editor.on("inputRead", function(cm) {
+      if(timeout) clearTimeout(timeout);
+
+      var cursor = cm.getCursor();
+      var ltr = cm.getRange({line: cursor.line, ch: cursor.ch - 1}, cursor);
+
+      if (/^[A-Za-z]/.test(ltr)) {
+        timeout = setTimeout(function() {
+            CodeMirror.showHint(cm, CodeMirror.hint.javascript, {completeSingle: false});
+        }, 150);
+      }
+  });
+  editor.on("renderLine", function(cm, line, el) {
+    // var nums = el.querySelectorAll(".cm-number");
+    // if (nums.length) {
+    //   for (var i = 0; i < nums.length; i++) {
+    //     if(nums[i].firstChild) {
+    //       nums[i].insertBefore(
+    //         get_slider(),
+    //         nums[i].firstChild
+    //       );
+    //     }
+    //   }
+    // }
+
+    // var line_num = cm.getLineNumber(line);
+    
+    // var prev, curr, pos, type;
+    // for (var ch = 0; ch < line.text.length; ch++) {
+    //   pos = {line: line_num, ch: ch}
+    //   type = cm.getTokenTypeAt(pos);
+    //   if (type) curr = type.contains("number");
+    //   else curr = false;
+
+    //   if (curr && !prev) {
+    //     console.log("add widget");
+    //     // cm.setBookmark(pos, {
+    //     //   widget: get_slider()
+    //     // });
+    //   }
+
+    //   prev = curr;
+    // }
+  });
+  editor.on("change", function(cm, change) {
+
+    // Identify line that was changed
+    var line_num = change.from.line;
+    var line = cm.getLineHandle(line_num);
+    
+    // Find all widget marks on this line and clear them
+    var marks = cm.findMarks(
+      {line: line_num, ch: 0 },
+      {line: line_num, ch: line.text.length }
+    );
+    for (var i = 0; i < marks.length; i++) {
+      marks[i].clear();
+    }
+
+    // Scan through this line and insert widget marks
+    var prev, curr, pos, type;
+    for (var ch = 0; ch < line.text.length; ch++) {
+      pos = {line: line_num, ch: ch}
+      type = cm.getTokenTypeAt(pos);
+      if (type) curr = type.contains("number");
+      else curr = false;
+
+      if (curr && !prev) {
+        var insert_pos = {line: line_num, ch: ch - 1};
+        var sl = get_slider();
+        var widg = cm.setBookmark(
+          insert_pos,
+          {
+            widget: sl.el,
+            insertLeft: true
+          }
+        );
+        sl.slider.widget = widg;
+      }
+      prev = curr;
+    }
+  });
+
+  open(filename, function(data){
+    editor.setValue(data);
+  });
+
+
+  nav[filename] = {
+    cm: editor,
+    title: filename,
+    save_state: "Just opened"
+  }
+  return editor;
+
+}
+
+nav["style.css"].cm.on("inputRead", function(cm) {
+  send_css(cm.getValue());
+});
+
+nav["style.css"].cm.on("change", function(cm) {
+  send_css(cm.getValue());
 });
 
 // $(window).resize(function(e){
 //   editor.refresh();
 // });
 
-open("test.txt");
 
 
 // ========================
@@ -42,10 +200,38 @@ open("test.txt");
 socket.on('message', function(msg) {
   if (msg.ID !== socket_id) {
     if (msg.from_disk) {
-      cm_script.setValue(msg.content);
+      nav[msg.file_name].cm.setValue(msg.content);
     }
     else if (msg.confirm_save) {
-      alert("Save successful!");
+      curr_tab.save_state = "Saved";
+      document.getElementById("save_status").innerText = "Saved";
+    }
+    else if (msg.console) {
+      var parsed = JSON.parse(msg.msg)
+      var text = parsed.text;
+      var cm = nav["script.js"].cm;
+
+
+      if (parsed.level == "error") {
+        text = text.split(":")[1];
+        cm.markText(
+          {ch: parsed.column - 1, line: parsed.line-1},
+          {ch: parsed.column + 2, line: parsed.line-1},
+          {className: "logged-error"}
+        );
+
+      }
+
+      var el = document.createElement("div");
+      el.className = "console-log-marker console-" + parsed.level;
+      el.innerText = text;
+
+      cm.setGutterMarker(
+        parsed.line - 1, // zero-indexed
+        "CodeMirror-lint-markers",
+        el
+      );
+
     }
   }
 });
@@ -93,17 +279,30 @@ for (var i = 0; i < tabs.length; i++ ) {
   tabs[i].addEventListener("click",function(e){
     e.preventDefault();
   });
-  tabs[i].addEventListener("mousedown",function(e){
-    var activetab = document.querySelector(".activetab");
-    if (activetab) activetab.classList.remove("activetab");
-    this.classList.add("activetab");
-
-    var sel = "." + this.getAttribute("data-tab");
-    var active = document.querySelector(".active");
-    if (active) active.classList.remove("active");
-    document.querySelector(sel).classList.add("active");
-  }, false);
+  tabs[i].addEventListener("mousedown", click_tab, false);
 }
+
+function click_tab(e) {
+  set_tab(this);
+}
+
+function set_tab(tab_el) {
+  var activetab = document.querySelector(".activetab");
+  if (activetab) activetab.classList.remove("activetab");
+  tab_el.classList.add("activetab");
+
+  var sel =  tab_el.getAttribute("data-tab");
+  var active = document.querySelector(".active");
+  if (active) active.classList.remove("active");
+  document.querySelector("." + sel).classList.add("active");
+
+  curr_tab = nav[sel.replace("_",".")];
+  curr_tab.cm.refresh();
+
+  document.getElementById("save_status").innerText = curr_tab.save_state;
+}
+
+set_tab(document.querySelectorAll("[data-tab]")[3]);
 
 
 // ========================
@@ -123,7 +322,12 @@ for (var i = 0; i < actions.length; i++ ) {
   }
   else if (attr == "save") {
     action.addEventListener("mousedown",function(e){
-      save("test.txt", cm_script.getValue());
+      save(curr_tab.title, curr_tab.cm.getValue());
+    }, false);
+  }
+  else if (attr == "reload") {
+    action.addEventListener("mousedown",function(e){
+      reload_browser();
     }, false);
   }
 
@@ -139,18 +343,19 @@ for (var i = 0; i < actions.length; i++ ) {
 
 
 function toggle_theme() {
-  if (cm_script.getOption("theme") !== "loop-dark") {
-    cm_script.setOption("theme", "loop-dark");
+  $("body").toggleClass("dark-theme");
+  if (curr_tab.cm.getOption("theme") !== "loop-dark") {
+    curr_tab.cm.setOption("theme", "loop-dark");
   }
   else {
-    cm_script.setOption("theme", "loop-light");
+    curr_tab.cm.setOption("theme", "loop-light");
   }
 }
 
-document.getElementById("execute").addEventListener("click", function(e){
-  e.preventDefault();
-  send_script();
-});
+// document.getElementById("execute").addEventListener("click", function(e){
+//   e.preventDefault();
+//   send_script();
+// });
 
 
 // ====================
@@ -164,8 +369,14 @@ function send() {
   });
 }
 
+function send_css(css) {
+  socket.emit('message', {
+    "css": css,
+    "ID": socket_id
+  });
+}
+
 function send_script() {
-  document.querySelector(".error").innerHTML = "";
   socket.emit('message', {
     "script": $editscript.innerText,
     "ID": socket_id
@@ -181,13 +392,21 @@ function save(filename, txt) {
   });
 }
 
-function open(filename) {
+function open(filename, callback) {
   socket.emit('message', {
     open: true,
     file_name: filename,
     "ID": socket_id
   });
 }
+
+function reload_browser() {
+  socket.emit('message', {
+    reload: true,
+    "ID": socket_id
+  });
+}
+
 
 function send_highlight(s) {
   socket.emit('message', {
@@ -221,35 +440,59 @@ function Slider(el) {
   var start = {x:0, y:0};
   var delt = {x:0, y:0};
   var val = 0;
+  var ext = "";
   var strtval = 0;
   var step = 1;
+  var curr_text = "";
+  var strt_text = "";
+  var pos;
 
-  $el.attr("contenteditable", false);
-  $rail.attr("contenteditable", false);
-  $thumb.attr("contenteditable", false);
+  // $el.attr("contenteditable", false);
+  // $rail.attr("contenteditable", false);
+  // $thumb.attr("contenteditable", false);
 
 
   $thumb.mousedown(function(e){
+
     dragging = true;
+    $val = $el.parent().next();
     $el.addClass("dragging");
     $("body").addClass("dragging");
-    $("#edit").attr("contenteditable", false);
     start.x = e.clientX;
     start.y = e.clientY;
     delt.x = 0;
     delt.y = 0;
-    val = parseInt($el.next().html());
+    strt_text = $val.html();
+    val = parseFloat(strt_text);
+    ext = strt_text.replace(/([-0-9.]*)/ , "");
     strtval = val;
+
+    if (ext == "em") step = 0.05;
+    else if (ext == "" && val < 20) step = 0.05; 
+    else step = 1;
+
+    curr_text = strt_text;
+    pos = self.widget.find();
   });
+
   $("html").mousemove(function(e){
     if (dragging) {
+
       delt.x = e.clientX - start.x;
       delt.y = e.clientY - start.y;
 
-      val = parseInt(strtval - parseInt(delt.y * 0.1) * step);
+      val = Math.round((strtval - parseInt(delt.y * 0.1) * step) * 100) / 100;
 
-      $val.html(val);
-      send();
+
+      curr_tab.cm.replaceRange(
+        (val + ext),
+        pos,
+        {
+          line: pos.line,
+          ch: (pos.ch + curr_text.length)
+        }
+      );
+      curr_text = val + ext;
 
       $rail.css({
         "-webkit-transform": "translate3d(0, " + delt.y + "px, 0)"
@@ -258,7 +501,6 @@ function Slider(el) {
   });
   $("html").mouseup(function(){
     dragging = false;
-    $("#edit").attr("contenteditable", true);
     $(".dragging").removeClass("dragging");
     $rail.css({
       "-webkit-transform": ""
@@ -282,6 +524,18 @@ function Slider(el) {
     }
 
   });
+}
+
+
+// ==========
+
+
+function get_slider() {
+  var val = 0;
+  var el = document.createElement('span');
+  el.className = 'slider';
+  var slider = new Slider(el);
+  return {slider: slider, el: el};
 }
 
 
@@ -491,5 +745,14 @@ function add_style_sheet(css) {
   return styleElement;
 }
 
+function get_mode_from_extension(ext) {
+  if (ext == "html") return "text/html";
+  else if (ext == "css") return ext;
+  else if (ext == "js") return "javascript";
+}
 
-
+if ( !String.prototype.contains ) {
+    String.prototype.contains = function() {
+        return String.prototype.indexOf.apply( this, arguments ) !== -1;
+    };
+}

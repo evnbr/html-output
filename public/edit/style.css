@@ -15,7 +15,7 @@ body {
   margin: 0px;
   padding-top: 3em;
   color: #4c6770;
-  font: 400 14px/1.4 "Source Sans Pro"; }
+  font: 400 16px/1.4 "National"; }
 
 a:link, a:visited {
   color: inherit; }
@@ -30,15 +30,19 @@ a:link, a:visited {
 
 .actions {
   position: absolute;
-  top: 0;
   right: 0;
-  padding: 1em;
   z-index: 99; }
   .actions a {
     display: inline-block;
     text-decoration: none;
-    padding: 1em 2em;
-    border: 1px solid black; }
+    padding: 0.8em 1.5em;
+    color: #00a3ff; }
+
+header.actions {
+  top: 0; }
+
+footer.actions {
+  bottom: 0; }
 
 h1 {
   font-size: 3rem; }
@@ -68,6 +72,10 @@ h2 {
     opacity: 0.3; }
   .nav .activetab {
     opacity: 1; }
+
+.dark-theme .nav {
+  background: #222222;
+  border-color: rgba(255, 255, 255, 0.15); }
 
 .btn {
   display: inline-block;
@@ -105,6 +113,15 @@ h2 {
     -webkit-transition: all 0.2s;
     cursor: pointer; }
 
+.CodeMirror {
+  /* Set height, width, borders, and global font properties here */
+  color: #535353;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  padding-top: 4em;
+  height: 100vh; }
+
 .marginalia {
   width: 10px; }
 
@@ -131,7 +148,7 @@ h2 {
   height: 11px;
   width: 2ch;
   position: relative;
-  opacity: 0.4;
+  opacity: 0.8;
   -webkit-transition: all 0.1s;
   cursor: ns-resize;
   -webkit-user-select: none; }
@@ -157,12 +174,14 @@ h2 {
       -webkit-transition: 0; }
 
 .slider-thumb {
-  height: 11px;
-  width: 11px;
+  height: 9px;
+  width: 9px;
   border: 1px solid #a1b0c6;
   border-radius: 50%;
   background: white;
-  position: absolute; }
+  position: absolute;
+  top: 2px;
+  left: 2px; }
 
 .slider-rail {
   -webkit-transition: all 0.1s;
@@ -170,8 +189,8 @@ h2 {
   width: 1px;
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(161, 176, 198, 0)), color-stop(50%, #a1b0c6), color-stop(100%, rgba(161, 176, 198, 0)));
   position: absolute;
-  top: -7px;
-  left: 5px;
+  top: -6px;
+  left: 6px;
   margin: auto; }
 
 input[type="range"] {
@@ -218,4 +237,7 @@ input[type="range"] {
       display: block; }
 
   .tabs {
-    padding-left: 200px; } }
+    padding-left: 200px; }
+
+  .CodeMirror {
+    padding-top: 1em; } }

@@ -1,11 +1,37 @@
 /* The lint marker gutter */
 .CodeMirror-lint-markers {
-  width: 120px;
+  width: 20px;
+  left: 1000px;
 }
 
 .CodeMirror-gutter-elt:hover {
   z-index: 999;
   background: white;
+}
+
+.CodeMirror-lint-marker-warning,
+.CodeMirror-lint-marker-error,
+.console-log-marker {
+  left: 600px;
+  min-width: 150px;
+  position: relative;
+  text-align: left;
+}
+
+.console-log-marker {
+  color: #bbb;
+  -webkit-animation: decay 0.2s;
+}
+
+.console-error {
+  color: rgba(200,0,0,1);
+  font: 14px/1.2 "National";
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+
+.logged-error {
+  background: rgba(255,0,0,0.2);
 }
 
 .CodeMirror-lint-tooltip {
@@ -76,15 +102,15 @@
 
 .CodeMirror-lint-marker-error:hover,
 .CodeMirror-lint-marker-warning:hover {
-  background: white;
-  outline: 1px solid gray;
-  overflow: visible;
-  height: auto;
+  // background: white;
+  // outline: 1px solid gray;
+  // overflow: visible;
+  // height: auto;
   z-index: 999;
 }
 
 .CodeMirror-lint-message-error, .CodeMirror-lint-message-warning {
-  padding-left: 18px;
+  // padding-left: 18px;
   background-position: top left;
   background-repeat: no-repeat;
   // width: 200px;
@@ -92,7 +118,6 @@
   font: 14px/1.2 "National";
   font-weight: 300;
   letter-spacing: 0.02em;
-  text-align: right;
   color: #bbb;
 
   padding-bottom: 0.5em;
@@ -114,7 +139,6 @@
 
 .CodeMirror-lint-message-warning.CM-current-lint {
   color: rgba(220,190,0,1);
-  color: black;
 }
 
 
@@ -136,6 +160,16 @@
     -webkit-transform: scale(1);
   }
 }
+
+@-webkit-keyframes decay {
+  0% {
+    color: black;
+  }
+  100% {
+    color: #bbb;
+  }
+}
+
 
 .CodeMirror-lint-marker-error, .CodeMirror-lint-message-error {
   //background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAHlBMVEW7AAC7AACxAAC7AAC7AAAAAAC4AAC5AAD///+7AAAUdclpAAAABnRSTlMXnORSiwCK0ZKSAAAATUlEQVR42mWPOQ7AQAgDuQLx/z8csYRmPRIFIwRGnosRrpamvkKi0FTIiMASR3hhKW+hAN6/tIWhu9PDWiTGNEkTtIOucA5Oyr9ckPgAWm0GPBog6v4AAAAASUVORK5CYII=");

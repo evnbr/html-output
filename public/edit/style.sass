@@ -1,245 +1,269 @@
 * 
-	margin: 0
-	padding: 0
-	font: inherit
-	-webkit-box-sizing: border-box
-	box-sizing: border-box
-	font: inherit
-	// -webkit-font-smoothing: antialiased
-	text-rendering: optimizeLegibility
+  margin: 0
+  padding: 0
+  font: inherit
+  -webkit-box-sizing: border-box
+  box-sizing: border-box
+  font: inherit
+  // -webkit-font-smoothing: antialiased
+  text-rendering: optimizeLegibility
 
 $color: #A1B0C6
 $bg: white //#2F353F
 
 body, html
-	overflow: hidden
-	height: 100%
+  overflow: hidden
+  height: 100%
 
 body
-	margin: 0px
-	// background: $bg
-	padding-top: 3em
-	color: #4C6770 //$color
-	// -webkit-transition: background 0.1s, color 0.1s
-	font: 400 14px/1.4 "Source Sans Pro"
+  margin: 0px
+  // background: $bg
+  padding-top: 3em
+  color: #4C6770 //$color
+  // -webkit-transition: background 0.1s, color 0.1s
+  font: 400 16px/1.4 "National"
 
 a:link, a:visited
-	color: inherit
+  color: inherit
 
 .error
-	color: yellow
-	margin-bottom: 3em
-	min-height: 2em
-	opacity: 0.8
-	.error-type
-		display: none
-		//text-transform: uppercase
-		//font-size: 0.7rem
-		//letter-spacing: 1px
+  color: yellow
+  margin-bottom: 3em
+  min-height: 2em
+  opacity: 0.8
+  .error-type
+    display: none
+    //text-transform: uppercase
+    //font-size: 0.7rem
+    //letter-spacing: 1px
 
 .actions
-	position: absolute
-	top: 0
-	right: 0
-	padding: 1em
-	z-index: 99
-	a
-		display: inline-block
-		text-decoration: none
-		padding: 1em 2em
-		border: 1px solid black
+  position: absolute
+  right: 0
+  z-index: 99
+  a
+    display: inline-block
+    text-decoration: none
+    padding: 0.8em 1.5em
+    color: #00A3FF
+
+header.actions
+  top: 0
+
+footer.actions
+  bottom: 0
 
 h1
-	font-size: 3rem
+  font-size: 3rem
 
 h2
-	font-size: 2rem
+  font-size: 2rem
 
 [data-selector]
-	// cursor: pointer
-	border-bottom: 1px solid rgba(white, 0.1)
-	&:hover
-		border-bottom: 1px solid white
-		color: white
+  // cursor: pointer
+  border-bottom: 1px solid rgba(white, 0.1)
+  &:hover
+    border-bottom: 1px solid white
+    color: white
 
 .nav
-	// background: lighten($bg, 5)
-	position: fixed
-	z-index: 10
-	top: 0
-	left: 0
-	right: 0
-	border: 0
-	background: white
-	border-bottom: 1px solid #ddd
-	a
-		display: inline-block
-		padding: 0.8em 1.5em
-		text-decoration: none
-		opacity: 0.3
-	.activetab
-		opacity: 1
+  // background: lighten($bg, 5)
+  position: fixed
+  z-index: 10
+  top: 0
+  left: 0
+  right: 0
+  border: 0
+  background: white
+  border-bottom: 1px solid #ddd
+  a
+    display: inline-block
+    padding: 0.8em 1.5em
+    text-decoration: none
+    opacity: 0.3
+  .activetab
+    opacity: 1
 
+.dark-theme .nav
+  background: #222
+  border-color: rgba(white,0.15)
 
 .btn
-	display: inline-block
-	padding: 0.8em 1em
-	margin-bottom: 1em
-	background: lighten($bg, 5)
-	color: white
-	text-decoration: none
+  display: inline-block
+  padding: 0.8em 1em
+  margin-bottom: 1em
+  background: lighten($bg, 5)
+  color: white
+  text-decoration: none
 
 
 .tabs
-	position: absolute
-	top: 0
-	right: 0
-	left: 0
+  position: absolute
+  top: 0
+  right: 0
+  left: 0
 
 .tab
-	display: none
-	&.active
-		display: block
+  display: none
+  &.active
+    display: block
 
 
 .editor
-	font: 400 14px/1.8 "Consolas"
-	// letter-spacing: -1px
-	// color: rgba(white, 0.05)
-	&:focus
-		outline: none
-	.minicolors-theme-default .minicolors-input
-		width: 0
-		height: 0
-		padding: 0
-		border: 0
-	.minicolors-theme-default .minicolors-swatch 
-		top: 0
-		left: 0
-		width: 100%
-		height: 100%
-		-webkit-transition: all 0.2s
-		cursor: pointer
-	.minicolors-theme-default .minicolors-swatch:hover
-		// -webkit-transform: scale(0.9)
-	.minicolors-theme-default .minicolors-swatch:active
-		// -webkit-transform: scale(0.8)
+  font: 400 14px/1.8 "Consolas"
+  // letter-spacing: -1px
+  // color: rgba(white, 0.05)
+  &:focus
+    outline: none
+  .minicolors-theme-default .minicolors-input
+    width: 0
+    height: 0
+    padding: 0
+    border: 0
+  .minicolors-theme-default .minicolors-swatch 
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%
+    -webkit-transition: all 0.2s
+    cursor: pointer
+  .minicolors-theme-default .minicolors-swatch:hover
+    // -webkit-transform: scale(0.9)
+  .minicolors-theme-default .minicolors-swatch:active
+    // -webkit-transform: scale(0.8)
+
+
+.CodeMirror
+  /* Set height, width, borders, and global font properties here */
+  color: #535353
+  top: 0
+  left: 0
+  bottom: 0
+  padding-top: 4em
+  height: 100vh
+
 
 .marginalia
-	width: 10px
+  width: 10px
 
 [class^="sel"]
-	font-weight: 400
-	font-style: italic
+  font-weight: 400
+  font-style: italic
 
 
 .sel-id
-	color: #CCA258 // #61B3E5
+  color: #CCA258 // #61B3E5
 
 .sel-class
-	color: #CB886C
+  color: #CB886C
 
 .sel-name
-	color: #B18EB0
+  color: #B18EB0
 
 
 .dragging
-	// color: rgba(white, 0.4) !important
-	cursor: ns-resize
-	*
-		-webkit-user-select: none !important
+  // color: rgba(white, 0.4) !important
+  cursor: ns-resize
+  *
+    -webkit-user-select: none !important
 
 
 .slider
-	display: inline-block
-	height: 11px
-	width: 2ch
-	position: relative
-	opacity: 0.4
-	-webkit-transition: all 0.1s
-	cursor: ns-resize
-	-webkit-user-select: none
-	&:focus
-		opacity: 1
-		outline: none
-		.slider-rail
-			background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(blue,0)), color-stop(50%,rgba(blue,1)), color-stop(100%,rgba(blue,0))) //$color
-		.slider-thumb
-			border-color: blue
-		& + span
-			color: blue
-	&:hover
-		opacity: 1
-		.slider-rail
-			height: 50px
-			top: -20px
-	&.dragging
-		opacity: 1
-		.slider-rail
-			height: 200px
-			top: -95px
-			-webkit-transition: 0
+  display: inline-block
+  height: 11px
+  width: 2ch
+  position: relative
+  opacity: 0.8
+  -webkit-transition: all 0.1s
+  cursor: ns-resize
+  -webkit-user-select: none
+  &:focus
+    opacity: 1
+    outline: none
+    .slider-rail
+      background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(blue,0)), color-stop(50%,rgba(blue,1)), color-stop(100%,rgba(blue,0))) //$color
+    .slider-thumb
+      border-color: blue
+    & + span
+      color: blue
+  &:hover
+    opacity: 1
+    .slider-rail
+      height: 50px
+      top: -20px
+  &.dragging
+    opacity: 1
+    .slider-rail
+      height: 200px
+      top: -95px
+      -webkit-transition: 0
 
 .slider-thumb
-	height: 11px
-	width: 11px
-	border: 1px solid $color
-	border-radius: 50%
-	background: $bg
-	position: absolute
+  height: 9px
+  width: 9px
+  border: 1px solid $color
+  border-radius: 50%
+  background: $bg
+  position: absolute
+  top: 2px
+  left: 2px
+
 
 .slider-rail
-	-webkit-transition: all 0.1s
-	height: 25px
-	width: 1px
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba($color,0)), color-stop(50%,rgba($color,1)), color-stop(100%,rgba($color,0))) //$color
-	position: absolute
-	top: -7px
-	left: 5px
-	margin: auto
+  -webkit-transition: all 0.1s
+  height: 25px
+  width: 1px
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba($color,0)), color-stop(50%,rgba($color,1)), color-stop(100%,rgba($color,0))) //$color
+  position: absolute
+  top: -6px
+  left: 6px
+  margin: auto
 
 input[type="range"]
-	-webkit-appearance: none
-	height: 1px
-	width: 150px
-	vertical-align: middle
-	background: $color
-	opacity: 0.4
-	-webkit-transition: all 0.1s
-	&:focus
-		outline: none
-		background: yellow
-		&::-webkit-slider-thumb
-			border-color: yellow
-	&:hover
-		opacity: 1
-		&::-webkit-slider-thumb
-			height: 15px
-			width: 15px
-	&::-webkit-slider-thumb
-		-webkit-appearance: none
-		height: 10px
-		width: 10px
-		border: 1px solid $color
-		border-radius: 50%
-		cursor: pointer
-		background: $bg
-		-webkit-transition: all 0.1s
-		&:hover
-			background: lighten($bg, 10)
+  -webkit-appearance: none
+  height: 1px
+  width: 150px
+  vertical-align: middle
+  background: $color
+  opacity: 0.4
+  -webkit-transition: all 0.1s
+  &:focus
+    outline: none
+    background: yellow
+    &::-webkit-slider-thumb
+      border-color: yellow
+  &:hover
+    opacity: 1
+    &::-webkit-slider-thumb
+      height: 15px
+      width: 15px
+  &::-webkit-slider-thumb
+    -webkit-appearance: none
+    height: 10px
+    width: 10px
+    border: 1px solid $color
+    border-radius: 50%
+    cursor: pointer
+    background: $bg
+    -webkit-transition: all 0.1s
+    &:hover
+      background: lighten($bg, 10)
 
 @media (min-width: 1500px)
-	body 
-		padding-top: 1em
+  body 
+    padding-top: 1em
 
-	.nav
-		width: 200px
-		bottom: 0
-		right: auto
-		border: 0
-		border-right: 1px solid #ddd
-		a
-			display: block
+  .nav
+    width: 200px
+    bottom: 0
+    right: auto
+    border: 0
+    border-right: 1px solid #ddd
+    a
+      display: block
 
-	.tabs
-		padding-left: 200px
+  .tabs
+    padding-left: 200px
+
+  .CodeMirror
+    padding-top: 1em

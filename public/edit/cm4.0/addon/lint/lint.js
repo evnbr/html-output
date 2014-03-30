@@ -180,7 +180,7 @@
 
   function popupSpanTooltip(ann, e) {
     var target = e.target || e.srcElement;
-    console.log(ann.from.line);
+    // console.log(ann.from.line);
 
     var el = document.getElementById(get_id_from(ann));
     el.classList.add("CM-current-lint");

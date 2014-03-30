@@ -21,6 +21,7 @@
   <link rel="stylesheet" href="cm4.0/theme/loop-light.css">
   <link rel="stylesheet" href="cm4.0/theme/loop-dark.css">
   <link rel="stylesheet" href="cm4.0/addon/lint/lint.css">
+  <link rel="stylesheet" href="cm4.0/addon/hint/show-hint.css">
 
   <!-- Libaries JS -->
   <script src="http://ajax.aspnetcdn.com/ajax/jshint/r07/jshint.js"></script>
@@ -31,44 +32,45 @@
 
   <!-- CodeMirror JS -->
   <script src="cm4.0/lib/codemirror.js"></script>
+
   <script src="cm4.0/mode/javascript/javascript.js"></script>
+  <script src="cm4.0/mode/css/css.js"></script>
+  <script src="cm4.0/mode/xml/xml.js"></script>
+  <script src="cm4.0/mode/htmlmixed/htmlmixed.js"></script>
+
   <script src="cm4.0/addon/lint/lint.js"></script>
   <script src="cm4.0/addon/lint/javascript-lint.js"></script>
+
+  <script src="cm4.0/addon/hint/show-hint.js"></script>
+  <script src="cm4.0/addon/hint/javascript-hint.js"></script>
+  <script src="cm4.0/addon/hint/css-hint.js"></script>
+  <script src="cm4.0/addon/hint/html-hint.js"></script>
+
+  <script src="cm4.0/addon/selection/active-line.js"></script>
 
 </head>
 
 <body>
 
-  <header class="nav">
-    <a href="#" data-action="theme">(Theme)</a>
+  <nav id="tab_nav" class="nav">
+    <a href="#" data-tab="css">(Beta) style.css</a>
+  </nav>
 
-    <a href="#" data-tab="html">index.html</a>
-    <a href="#" data-tab="css">style.css</a>
-    <a href="#" data-tab="script" class="activetab">script.js</a>
+  <header class="actions">
+    <a href="#" data-action="reload">↺</a>
   </header>
+  <footer class="actions">
+    <span id="save_status">Just opened</span>
+    <!-- <a href="#" data-action="save">Save</a> -->
+    <a href="#" data-action="theme">☾</a>
+  </footer>
 
-  <div class="tabs">
-    <div class="html tab">
-      <pre id="edithtml" class="editor" contenteditable autocorrect="off" spellcheck="false">
-  html goes here
-      </pre>
-    </div>
 
+
+  <div id="tab_content" class="tabs">
     <div class="css tab">
     	<pre id="edit" class="editor" contenteditable autocorrect="off" spellcheck="false">
       </pre>
-    </div>
-
-    <div class="script tab active">
-      <header class="actions">
-        <a href="#" data-action="save">Save</a>
-      </header>
-
-      <textarea id="editscript" class="editor codemirror">
-test
-      </textarea>
-      <div class="error"></div>
-      <a href="#" class="btn" id="execute">Restart script</a>
     </div>
   </div>
 
