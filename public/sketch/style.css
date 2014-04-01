@@ -9,7 +9,7 @@
 }
 
 html {
-  font: 56px/1.55 "National", "Arial", sans-serif; 
+  font: 56px/1.0 "Arial", sans-serif; 
 }
 
 body {
@@ -26,6 +26,8 @@ body {
 h1 {
   font-weight: bold;
   display: inline-block;
+  font-size: 2em;
+  padding-bottom: 0.5em;
 }
 
 a:link, a:visited {
@@ -40,4 +42,10 @@ a:link, a:visited {
 
 p {
   margin-bottom: 1em;
+}
+
+@media (max-width: 500px) {
+  body {
+    font-size: 24px;
+  }
 }
