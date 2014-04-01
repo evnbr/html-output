@@ -9,17 +9,23 @@
 }
 
 html {
-  font: 56px/1.02 "Arial", sans-serif; 
+  font: 56px/1.55 "National", "Arial", sans-serif; 
 }
 
 body {
-  color: white;
-  background: black;
+  color: black;
+  background: white;
+
   margin-bottom: 90vh; 
 }
 
 #content {
   position: relative;
+}
+
+h1 {
+  font-weight: bold;
+  display: inline-block;
 }
 
 a:link, a:visited {
@@ -29,7 +35,7 @@ a:link, a:visited {
 .wrap {
   margin: 0 auto;
   width: 100%; 
-  padding: 0 1.99em; 
+  padding: 1em 2em; 
 }
 
 p {
