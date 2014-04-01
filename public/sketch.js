@@ -8,13 +8,13 @@ socket.on('message', function(msg) {
       insert_css("test", msg.css);
     }
     else if (msg.script) {
-      var node = document.getElementsByTagName("head")[0] || document.body;
-      if (node) {
-        var script = document.createElement("script");
-        script.type = "text/javascript";
-        script.text = msg.script;
-        node.appendChild(script);
-      }
+      // var node = document.getElementsByTagName("head")[0] || document.body;
+      // if (node) {
+      //   var script = document.createElement("script");
+      //   script.type = "text/javascript";
+      //   script.text = msg.script;
+      //   node.appendChild(script);
+      // }
     }
     else if (msg.highlight) {
       highlight(msg.highlight);

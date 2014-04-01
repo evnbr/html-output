@@ -59,7 +59,7 @@ function make_tab(filename) {
     mode: mode,
     tabSize: 2,
     styleActiveLine: true,
-    lineNumbers: true,
+    lineNumbers: false,
     lineWrapping: true,
     gutters: ["CodeMirror-lint-markers"],
     lint: (mode == "javascript"),
@@ -179,6 +179,12 @@ function make_tab(filename) {
 
 }
 
+
+// ========================
+
+// L I V E  R E L O A D
+
+
 nav["style.css"].cm.on("inputRead", function(cm) {
   send_css(cm.getValue());
 });
@@ -186,6 +192,12 @@ nav["style.css"].cm.on("inputRead", function(cm) {
 nav["style.css"].cm.on("change", function(cm) {
   send_css(cm.getValue());
 });
+
+nav["script.js"].cm.on("change", function(cm) {
+  send_script(cm.getValue(), "http://localhost:3000/sketch/script.js");
+});
+
+
 
 // $(window).resize(function(e){
 //   editor.refresh();
@@ -255,13 +267,13 @@ socket.on('message', function(msg) {
 
 
 var css = "";
-for (var i = 0; i < 40; i++) {
-  var col = $.husl.p.toHex(((i / 40) * 360), 60, 60);
+for (var i = 0; i < 100; i++) {
+  var col = $.husl.p.toHex(((i / 40) * 360), 80, 55);
   var className = ".cm-s-loop-light .cm-color-" + i;
   css += className + " { color: " + col + "}\n"; 
 }
 
-for (var i = 0; i < 40; i++) {
+for (var i = 0; i < 100; i++) {
   var col = $.husl.p.toHex(((i / 40) * 360), 50, 50);
   var className = ".cm-s-loop-dark .cm-color-" + i;
   css += className + " { color: " + col + "}\n"; 
@@ -376,14 +388,18 @@ function send_css(css) {
   });
 }
 
-function send_script() {
+function send_script(script, url) {
   socket.emit('message', {
-    "script": $editscript.innerText,
-    "ID": socket_id
+    swapscript: true,
+    script: script,
+    url: url,
+    ID: socket_id
   });
 }
 
 function save(filename, txt) {
+
+  reload_browser();
   socket.emit('message', {
     save: true,
     file_name: filename,
@@ -468,7 +484,7 @@ function Slider(el) {
     strtval = val;
 
     if (ext == "em") step = 0.05;
-    else if (ext == "" && val < 20) step = 0.05; 
+    else if (ext == "" && val < 3) step = 0.1; 
     else step = 1;
 
     curr_text = strt_text;
@@ -481,7 +497,7 @@ function Slider(el) {
       delt.x = e.clientX - start.x;
       delt.y = e.clientY - start.y;
 
-      val = Math.round((strtval - parseInt(delt.y * 0.1) * step) * 100) / 100;
+      val = Math.round((strtval - parseInt(delt.y * 0.3) * step) * 100) / 100;
 
 
       curr_tab.cm.replaceRange(

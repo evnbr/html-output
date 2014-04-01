@@ -5,6 +5,7 @@
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   font: inherit;
+  -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility; }
 
 body, html {
@@ -15,7 +16,7 @@ body {
   margin: 0px;
   padding-top: 3em;
   color: #4c6770;
-  font: 400 16px/1.4 "National"; }
+  font: 400 14px/1.4 "National"; }
 
 a:link, a:visited {
   color: inherit; }
@@ -120,6 +121,8 @@ h2 {
   left: 0;
   bottom: 0;
   padding-top: 4em;
+  padding-left: 1em;
+  padding-right: 1em;
   height: 100vh; }
 
 .marginalia {
@@ -148,7 +151,7 @@ h2 {
   height: 11px;
   width: 2ch;
   position: relative;
-  opacity: 0.8;
+  opacity: 0.7;
   -webkit-transition: all 0.1s;
   cursor: ns-resize;
   -webkit-user-select: none; }
@@ -176,21 +179,21 @@ h2 {
 .slider-thumb {
   height: 9px;
   width: 9px;
-  border: 1px solid #a1b0c6;
+  border: 1px solid #00a3ff;
   border-radius: 50%;
   background: white;
   position: absolute;
-  top: 2px;
-  left: 2px; }
+  top: 3px;
+  left: 3px; }
 
 .slider-rail {
   -webkit-transition: all 0.1s;
-  height: 25px;
+  height: 20px;
   width: 1px;
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(161, 176, 198, 0)), color-stop(50%, #a1b0c6), color-stop(100%, rgba(161, 176, 198, 0)));
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 163, 255, 0)), color-stop(50%, #00a3ff), color-stop(100%, rgba(0, 163, 255, 0)));
   position: absolute;
-  top: -6px;
-  left: 6px;
+  top: -3px;
+  left: 7px;
   margin: auto; }
 
 input[type="range"] {

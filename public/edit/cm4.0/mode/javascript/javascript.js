@@ -255,7 +255,7 @@ CodeMirror.defineMode("javascript", function(config, parserConfig) {
 
         if (type == "variable" || type == "def") {
           // console.log(content + ": " + Math.abs(hash%20) );
-          var color = Math.abs(hashCode(content) % 40);
+          var color = Math.abs(hashCode(content) % 100);
 
           if (cx.marked) return cx.marked + " color-" + color;
           if (inScope(state, content)) return "variable-2" + " color-" + color;

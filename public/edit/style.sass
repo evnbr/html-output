@@ -5,7 +5,7 @@
   -webkit-box-sizing: border-box
   box-sizing: border-box
   font: inherit
-  // -webkit-font-smoothing: antialiased
+  -webkit-font-smoothing: antialiased
   text-rendering: optimizeLegibility
 
 $color: #A1B0C6
@@ -21,7 +21,7 @@ body
   padding-top: 3em
   color: #4C6770 //$color
   // -webkit-transition: background 0.1s, color 0.1s
-  font: 400 16px/1.4 "National"
+  font: 400 14px/1.4 "National"
 
 a:link, a:visited
   color: inherit
@@ -140,6 +140,8 @@ h2
   left: 0
   bottom: 0
   padding-top: 4em
+  padding-left: 1em
+  padding-right: 1em
   height: 100vh
 
 
@@ -173,7 +175,7 @@ h2
   height: 11px
   width: 2ch
   position: relative
-  opacity: 0.8
+  opacity: 0.7
   -webkit-transition: all 0.1s
   cursor: ns-resize
   -webkit-user-select: none
@@ -198,25 +200,26 @@ h2
       top: -95px
       -webkit-transition: 0
 
+$redcolor: #00A3FF //#D50000
+
 .slider-thumb
   height: 9px
   width: 9px
-  border: 1px solid $color
+  border: 1px solid $redcolor
   border-radius: 50%
   background: $bg
   position: absolute
-  top: 2px
-  left: 2px
-
+  top: 3px
+  left: 3px
 
 .slider-rail
   -webkit-transition: all 0.1s
-  height: 25px
+  height: 20px
   width: 1px
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba($color,0)), color-stop(50%,rgba($color,1)), color-stop(100%,rgba($color,0))) //$color
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba($redcolor,0)), color-stop(50%,rgba($redcolor,1)), color-stop(100%,rgba($redcolor,0))) //$color
   position: absolute
-  top: -6px
-  left: 6px
+  top: -3px
+  left: 7px
   margin: auto
 
 input[type="range"]
