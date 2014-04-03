@@ -4,6 +4,7 @@ var express = require('express')
   , socketServer = http.createServer(app)
   , io = require('socket.io').listen(socketServer)
   , fs = require('fs')
+  , sass = require('node-sass')
   ;
 
 // function handler (req, res) {
@@ -23,19 +24,26 @@ var server = socketServer.listen(process.env.PORT || 3000, function() {
 io.sockets.on('connection', function (socket) {
   socket.on('message', function(message) {
 
-  	console.log("hello!");
-
   	if (message.save && message.file_name) {
 
   		console.log("someone is telling me to save " + message.file_name);
   		save(message.file_name, message.text, message.ID);
   	}
-  	if (message.open && message.file_name) {
+  	else if (message.open && message.file_name) {
 
   		console.log("someone is telling me to open " + message.file_name);
   		open(message.file_name, message.text, message.ID)
   	}
-
+  	else if (message.scss) {
+  		try{
+	  		message.css = sass.renderSync({
+	    		data: message.scss
+			});
+			io.sockets.emit('message', message);
+		} catch(err) {
+			console.log(err);
+		}
+  	}
   	else {
     	io.sockets.emit('message', message);
 	}
