@@ -9,7 +9,7 @@
 }
 
 html {
-  font: 56px/1.0 "Arial", sans-serif; 
+  font: 49px/1.0 "Arial", sans-serif; 
 }
 
 body {
@@ -32,6 +32,14 @@ h1 {
 
 a:link, a:visited {
   color: inherit; 
+}
+
+.better {
+  display: none;
+}
+
+.initial {
+  display: block;
 }
 
 .wrap {
