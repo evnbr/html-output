@@ -1,0 +1,63 @@
+$num: 56px;
+$col: hsl(162,13,59); 
+
+* {
+  padding: 0;
+  margin: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  font: inherit;
+  text-rendering: optimizeLegibility;
+}
+
+html {
+  font: 55px / 1 "Arial", sans-serif;  
+}
+
+body {
+  color: black;
+  background: white;
+  margin-bottom: 90vh; 
+  color: darken($col, 20); 
+}
+
+#content {
+  position: relative;
+}
+
+h1 {
+  font-weight: bold;
+  display: inline-block;
+  font-size: 1.4em; 
+  padding-bottom: 0.5em;
+  color: darken($col, 20);
+}
+
+a:link, a:visited {
+  color: inherit; 
+}
+
+.better {
+  display: none;
+}
+
+.initial {
+  display: block;
+}
+
+.wrap {
+  margin: 0 auto;
+  width: 100%; 
+  padding: 1em 2em; 
+}
+
+p {
+  margin-bottom: 1em;
+}
+
+@media (max-width: 500px) {
+  body {
+    font-size: 24px;
+  }
+}

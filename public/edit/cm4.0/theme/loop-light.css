@@ -41,7 +41,7 @@
 
 .cm-s-loop-light.CodeMirror {
 	color: #888; //#7D7E81; //#747A8B;
-	font: 15px/1.3 "Consolas";
+	font: 14px/1.3 "Consolas";
 }
 
 .cm-s-loop-light .cm-atom,
@@ -73,19 +73,19 @@
   // font-weight: bold;
 }
 .cm-s-loop-light .cm-def {
-  color: blue;
+  color: black;
   font-weight: bold;
 }
 .cm-s-loop-light .cm-variable {
-  color: blue;
+  color: brown;
   font-weight: bold;
 }
 .cm-s-loop-light .cm-variable-2 {
-  color: blue;
+  color: brown;
   font-weight: bold;
 }
 .cm-s-loop-light .cm-variable-3 {
-  color: blue;
+  color: brown;
   font-weight: bold;
 }
 .cm-s-loop-light .cm-property {
@@ -103,7 +103,7 @@
 .cm-s-loop-light .cm-string {
   color: #00A3FF;
   // color: #D50000;
-  color: black;
+  color: rgb(172, 47, 47);
 }
 
 /* REGEX */
@@ -111,14 +111,31 @@
 	color: #894BCC;
 }
 
-.cm-s-loop-light .cm-meta {color: #555;}
-.cm-s-loop-light .cm-qualifier {color: #555;}
-.cm-s-loop-light .cm-builtin {color: #30a;}
-.cm-s-loop-light .cm-bracket {color: red;}
-.cm-s-loop-light .cm-tag {color: #170;}
-.cm-s-loop-light .cm-attribute {color: #00c;}
-.cm-s-loop-light .cm-header {color: blue;}
-.cm-s-loop-light .cm-quote {color: #090;}
+.cm-s-loop-light .cm-meta {
+  color: #555;
+}
+.cm-s-loop-light .cm-qualifier {
+  color: #555;
+}
+.cm-s-loop-light .cm-builtin {
+  color: #30a;
+}
+.cm-s-loop-light .cm-bracket {
+  color: red;
+}
+.cm-s-loop-light .cm-tag {
+  color: rgb(129, 152, 165);
+  font-weight: bold;
+}
+.cm-s-loop-light .cm-attribute {
+  color: rgb(129, 152, 165);
+}
+.cm-s-loop-light .cm-header {
+  color: blue;
+}
+.cm-s-loop-light .cm-quote {
+  color: #090;
+}
 .cm-s-loop-light .cm-hr {color: #999;}
 .cm-s-loop-light .cm-link {color: #00c;}
 
