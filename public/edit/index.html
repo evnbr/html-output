@@ -33,6 +33,8 @@
   <!-- CodeMirror JS -->
   <script src="cm4.0/lib/codemirror.js"></script>
 
+  <script src="cm4.0/addon/search/searchcursor.js"></script>
+
   <script src="cm4.0/mode/javascript/javascript.js"></script>
   <script src="cm4.0/mode/css/css.js"></script>
   <script src="cm4.0/mode/xml/xml.js"></script>
@@ -45,20 +47,23 @@
   <script src="cm4.0/addon/hint/javascript-hint.js"></script>
   <script src="cm4.0/addon/hint/css-hint.js"></script>
   <script src="cm4.0/addon/hint/html-hint.js"></script>
-
   <script src="cm4.0/addon/selection/active-line.js"></script>
+
+  <script src="cm4.0/addon/comment/comment.js"></script>
+
+  <script src="cm4.0/keymap/sublime.js"></script>
 
 </head>
 
 <body>
 
   <nav id="tab_nav" class="nav">
-    <a href="#" data-tab="css">(Beta) style.css</a>
+    <!-- <a href="#" data-tab="css">(Beta) style.css</a> -->
   </nav>
 
   <header class="actions">
     <!--<a href="#" data-action="reload">↺</a>-->
-    <a href="/sketch/" target="_blank">Preview</a>
+    <!-- <a href="/sketch/" target="_blank">Preview</a>-->
   </header>
   <footer class="actions">
     <span id="save_status">Just opened</span>
@@ -69,10 +74,10 @@
 
 
   <div id="tab_content" class="tabs">
-    <div class="css tab">
+    <!-- <div class="css tab">
     	<pre id="edit" class="editor" contenteditable autocorrect="off" spellcheck="false">
       </pre>
-    </div>
+    </div> -->
   </div>
 
   <!-- App JS -->
