@@ -5,10 +5,10 @@
   -webkit-box-sizing: border-box
   box-sizing: border-box
   font: inherit
-  -webkit-font-smoothing: antialiased
+  // -webkit-font-smoothing: antialiased
   text-rendering: optimizeLegibility
 
-$color: #A1B0C6
+$color: black //#A1B0C6
 $bg: white //#2F353F
 
 body, html
@@ -18,10 +18,28 @@ body, html
 body
   margin: 0px
   // background: $bg
-  padding-top: 3em
+  padding-top: 2em
   color: #4C6770 //$color
   // -webkit-transition: background 0.1s, color 0.1s
   font: 400 14px/1.4 "National"
+  font: 400 12px/1.4 "Lucida Grande"
+
+
+//::-webkit-scrollbar-button       
+//::-webkit-scrollbar-track      
+//::-webkit-scrollbar-track-piece  
+
+
+::-webkit-scrollbar-thumb
+  background: rgba(0,0,0,0.05)
+
+::-webkit-scrollbar   
+  width: 2px
+
+
+//::-webkit-scrollbar-corner       
+//::-webkit-resizer               
+
 
 a:link, a:visited
   color: inherit
@@ -74,8 +92,9 @@ h2
   left: 0
   right: 0
   border: 0
+  //background: #e4e4e4
   background: white
-  border-bottom: 1px solid #ddd
+  border-bottom: 1px solid #eee
   a
     display: inline-block
     padding: 0.8em 1.5em
@@ -102,12 +121,34 @@ h2
   top: 0
   right: 0
   left: 0
+  bottom: 0
+  white-space: nowrap
+  overflow: hidden
 
 .tab
-  display: none
+  // -webkit-transform: translate3d(90%, 0, 0)
+  -webkit-transition: all 0.3s cubic-bezier(0.220, 1.10, 0.365, 1.000)
+  position: absolute
+  top: 0
+  bottom: 0
+  //left: 0
+  //right: 0
+  // display: none
+  vertical-align: top
+  width: 600px
+  // background: #f9f9f9
+  // border-right: 1px solid #eee
   &.active
-    display: block
+    // display: block
+    opacity: 1
+    // background: white
+    -webkit-transform: translate3d(0, 0, 0)
 
+.style_scss
+  background: #FCFAF2
+
+.script_js
+  background: #F5FAFA
 
 .editor
   font: 400 14px/1.8 "Consolas"
@@ -136,13 +177,12 @@ h2
 .CodeMirror
   /* Set height, width, borders, and global font properties here */
   color: #535353
-  top: 0
+  top: 2.8em
   left: 0
   bottom: 0
-  padding-top: 4em
   padding-left: 1em
   padding-right: 1em
-  height: 100vh
+  height: calc(100vh - 2.8em)
 
 
 .marginalia
