@@ -6,6 +6,7 @@ socket.on('message', function(msg) {
   if (msg.ID !== socket_id) {
     if (msg.css) {
       insert_css("test", msg.css);
+      console.log(msg.css);
     }
     else if (msg.script) {
       // var node = document.getElementsByTagName("head")[0] || document.body;
@@ -15,6 +16,9 @@ socket.on('message', function(msg) {
       //   script.text = msg.script;
       //   node.appendChild(script);
       // }
+    }
+    else if (msg.reload) {
+      window.location.reload(true);
     }
     else if (msg.highlight) {
       highlight(msg.highlight);
