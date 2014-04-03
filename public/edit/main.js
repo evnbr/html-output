@@ -1,6 +1,11 @@
 var socket = io.connect('/');
 var socket_id = parseInt(Math.random() * 10000);
 
+if ( !String.prototype.contains ) {
+  String.prototype.contains = function() {
+      return String.prototype.indexOf.apply( this, arguments ) !== -1;
+  };
+}
 
 // var editor = ace.edit("editscript");
 // editor.setTheme("ace/theme/dawn");
@@ -17,24 +22,32 @@ var $tab_nav = document.getElementById("tab_nav");
 var $tab_content = document.getElementById("tab_content");
 
 
+// window.onbeforeunload = function() {
+//   return "Don't forget to save your changes!";
+// }
+
+
 // ========================
 
 var nav = {};
 var curr_tab;
 
 var file_arr = [
+  "style.scss",
   "index.html",
-  "style.css",
-  "script.js"
+  "script.js",
+  "test.txt",
+  "test2.txt",
+  "test3.txt",
 ];
 
 for (var i = 0; i < file_arr.length; i++) {
-  make_tab(file_arr[i]);
+  make_tab(i, file_arr[i]);
 }
 
 
 
-function make_tab(filename) {
+function make_tab(index, filename) {
 
   var ext = filename.split(".")[1];
   var mode = get_mode_from_extension(ext);
@@ -42,13 +55,14 @@ function make_tab(filename) {
 
   var tab = document.createElement("a");
   tab.setAttribute("href", "#");
-  tab.setAttribute("data-tab", escaped); 
+  tab.setAttribute("data-tabname", escaped); 
   tab.innerText = filename;
 
   tab_nav.appendChild(tab);
 
   var tab_panel = document.createElement("div");
   tab_panel.className = escaped + " tab";
+  tab_panel.setAttribute("data-tabpanel", escaped); 
   tab_content.appendChild(tab_panel);
 
 
@@ -78,6 +92,7 @@ function make_tab(filename) {
         });
       }
     },
+    keyMap: "sublime",
     theme: "loop-light"
   });
 
@@ -96,72 +111,53 @@ function make_tab(filename) {
   });
   editor.on("renderLine", function(cm, line, el) {
     // var nums = el.querySelectorAll(".cm-number");
-    // if (nums.length) {
-    //   for (var i = 0; i < nums.length; i++) {
-    //     if(nums[i].firstChild) {
-    //       nums[i].insertBefore(
-    //         get_slider(),
-    //         nums[i].firstChild
-    //       );
-    //     }
-    //   }
-    // }
-
-    // var line_num = cm.getLineNumber(line);
-    
-    // var prev, curr, pos, type;
-    // for (var ch = 0; ch < line.text.length; ch++) {
-    //   pos = {line: line_num, ch: ch}
-    //   type = cm.getTokenTypeAt(pos);
-    //   if (type) curr = type.contains("number");
-    //   else curr = false;
-
-    //   if (curr && !prev) {
-    //     console.log("add widget");
-    //     // cm.setBookmark(pos, {
-    //     //   widget: get_slider()
-    //     // });
-    //   }
-
-    //   prev = curr;
-    // }
+  });
+  editor.on("focus", function(cm) {
+    var tabname = cm.display.wrapper.parentNode.getAttribute("data-tabpanel");
+    set_tab_by_name(tabname);
   });
   editor.on("change", function(cm, change) {
 
-    // Identify line that was changed
-    var line_num = change.from.line;
-    var line = cm.getLineHandle(line_num);
-    
-    // Find all widget marks on this line and clear them
-    var marks = cm.findMarks(
-      {line: line_num, ch: 0 },
-      {line: line_num, ch: line.text.length }
-    );
-    for (var i = 0; i < marks.length; i++) {
-      marks[i].clear();
-    }
+    var start_line = change.from.line;
+    var end_line = change.to.line;
 
-    // Scan through this line and insert widget marks
-    var prev, curr, pos, type;
-    for (var ch = 0; ch < line.text.length; ch++) {
-      pos = {line: line_num, ch: ch}
-      type = cm.getTokenTypeAt(pos);
-      if (type) curr = type.contains("number");
-      else curr = false;
 
-      if (curr && !prev) {
-        var insert_pos = {line: line_num, ch: ch - 1};
-        var sl = get_slider();
-        var widg = cm.setBookmark(
-          insert_pos,
-          {
-            widget: sl.el,
-            insertLeft: true
-          }
-        );
-        sl.slider.widget = widg;
+    for (var j = start_line; j <= end_line; j++ ) {
+      // Identify line that was changed
+      var line_num = j;
+      var line = cm.getLineHandle(line_num);
+      
+      // Find all widget marks on this line and clear them
+      var marks = cm.findMarks(
+        {line: line_num, ch: 0 },
+        {line: line_num, ch: line.text.length }
+      );
+      for (var i = 0; i < marks.length; i++) {
+        marks[i].clear();
       }
-      prev = curr;
+
+      // Scan through this line and insert widget marks
+      var prev, curr, pos, type;
+      for (var ch = 0; ch < line.text.length; ch++) {
+        pos = {line: line_num, ch: ch}
+        type = cm.getTokenTypeAt(pos);
+        if (type) curr = type.contains("number");
+        else curr = false;
+
+        if (curr && !prev) {
+          var insert_pos = {line: line_num, ch: ch - 1};
+          var sl = get_slider();
+          var widg = cm.setBookmark(
+            insert_pos,
+            {
+              widget: sl.el,
+              insertLeft: true
+            }
+          );
+          sl.slider.widget = widg;
+        }
+        prev = curr;
+      }
     }
   });
 
@@ -169,33 +165,48 @@ function make_tab(filename) {
     editor.setValue(data);
   });
 
+  var left = index * 600;
+  tab_panel.style.webkitTransform = "translate3d(" + left + "px,0,0)";
 
   nav[filename] = {
     cm: editor,
+    left: left,
+    panel: tab_panel,
     title: filename,
     save_state: "Just opened"
   }
+
+
+
+  // ========================
+
+  // L I V E  R E L O A D
+
+  if (mode == "css") {
+    editor.on("inputRead", function(cm) {
+      send_css(cm.getValue());
+    });
+    editor.on("change", function(cm) {
+      send_css(cm.getValue());
+    });
+  }
+  else if (mode == "text/x-scss") {
+    editor.on("change", function(cm) {
+      send_scss(cm.getValue());
+    });
+  }
+  else if (mode == "javascript") {
+    editor.on("change", function(cm) {
+      send_script(cm.getValue(), "http://localhost:3000/sketch/script.js");
+    });
+  }
+
+
   return editor;
 
 }
 
 
-// ========================
-
-// L I V E  R E L O A D
-
-
-nav["style.css"].cm.on("inputRead", function(cm) {
-  send_css(cm.getValue());
-});
-
-nav["style.css"].cm.on("change", function(cm) {
-  send_css(cm.getValue());
-});
-
-nav["script.js"].cm.on("change", function(cm) {
-  send_script(cm.getValue(), "http://localhost:3000/sketch/script.js");
-});
 
 
 
@@ -286,7 +297,7 @@ add_style_sheet(css);
 
 // I N I T I I A L I Z E   T A B S
 
-var tabs = document.querySelectorAll("[data-tab]");
+var tabs = document.querySelectorAll("[data-tabname]");
 for (var i = 0; i < tabs.length; i++ ) {
   tabs[i].addEventListener("click",function(e){
     e.preventDefault();
@@ -298,12 +309,17 @@ function click_tab(e) {
   set_tab(this);
 }
 
+
+function set_tab_by_name(name) {
+  set_tab(document.querySelector("[data-tabname=" + name + "]"));
+}
+ 
 function set_tab(tab_el) {
   var activetab = document.querySelector(".activetab");
   if (activetab) activetab.classList.remove("activetab");
   tab_el.classList.add("activetab");
 
-  var sel =  tab_el.getAttribute("data-tab");
+  var sel =  tab_el.getAttribute("data-tabname");
   var active = document.querySelector(".active");
   if (active) active.classList.remove("active");
   document.querySelector("." + sel).classList.add("active");
@@ -311,10 +327,31 @@ function set_tab(tab_el) {
   curr_tab = nav[sel.replace("_",".")];
   curr_tab.cm.refresh();
 
+  var newleft = curr_tab.left;
+  var tabs_width = 1800;
+  var body_width = $("body").width();
+
+  // console.log(tabs_width + 500);
+  // console.log(body_width + 500);
+  // console.log(newleft);
+
+  // if (newleft > body_width + 500) {
+  //   newleft = body_width + 500;
+  // }
+
+  var i = 0;
+  for (tabname in nav) {
+    var t = nav[tabname];
+    t.left = t.left - newleft + 20;
+    t.panel.style.webkitTransform = "translate3d(" + t.left + "px,0,0)";
+    // t.panel.style.webkitTransitionDelay = 30*i + "ms";
+    i++;
+  }
+
   document.getElementById("save_status").innerText = curr_tab.save_state;
 }
 
-set_tab(document.querySelectorAll("[data-tab]")[3]);
+set_tab(document.querySelectorAll("[data-tab]")[0]);
 
 
 // ========================
@@ -384,6 +421,13 @@ function send() {
 function send_css(css) {
   socket.emit('message', {
     "css": css,
+    "ID": socket_id
+  });
+}
+
+function send_scss(scss) {
+  socket.emit('message', {
+    "scss": scss,
     "ID": socket_id
   });
 }
@@ -764,11 +808,7 @@ function add_style_sheet(css) {
 function get_mode_from_extension(ext) {
   if (ext == "html") return "text/html";
   else if (ext == "css") return ext;
+  else if (ext == "scss") return "text/x-scss";
   else if (ext == "js") return "javascript";
 }
 
-if ( !String.prototype.contains ) {
-    String.prototype.contains = function() {
-        return String.prototype.indexOf.apply( this, arguments ) !== -1;
-    };
-}
