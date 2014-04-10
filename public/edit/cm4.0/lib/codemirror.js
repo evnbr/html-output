@@ -607,7 +607,8 @@
 
     display.viewOffset = heightAtLine(getLine(cm.doc, display.viewFrom));
     // Position the mover div to align with the current scroll position
-    cm.display.mover.style.top = display.viewOffset + "px";
+    // cm.display.mover.style.top = display.viewOffset + "px";
+    cm.display.mover.style.webkitTransform = "translate3d(0," + display.viewOffset + "px, 0)";
 
     var toUpdate = countDirtyView(cm);
     if (!different && toUpdate == 0 && !forced) return;

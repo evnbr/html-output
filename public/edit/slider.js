@@ -2,6 +2,7 @@
 
 
 function Slider(el) {
+  console.log("built slider");
   var self = this;
   var $el = $(el);
 

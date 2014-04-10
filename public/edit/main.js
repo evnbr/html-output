@@ -25,9 +25,10 @@ var nav = {};
 var curr_tab;
 
 var file_arr = [
-  "style.scss",
+  "style.styl",
   "index.html",
   "script.js",
+  "style.scss",
 ];
 
 for (var i = 0; i < file_arr.length; i++) {
@@ -115,7 +116,7 @@ function make_tab(index, filename) {
   });
   editor.on("change", function(cm, change) {
 
-    // widgetize(cm, change.from.line, change.to.line);
+    widgetize(cm, change.from.line, change.to.line);
   });
 
   open(filename, function(cm, data){
@@ -149,9 +150,16 @@ function make_tab(index, filename) {
     });
   }
   else if (mode == "text/x-scss") {
-    editor.on("change", function(cm) {
-      send_scss(cm.getValue());
-    });
+    if (ext == "scss") {
+      editor.on("change", function(cm) {
+        send_scss(cm.getValue());
+      });
+    }
+    else if (ext == "styl") {
+      editor.on("change", function(cm) {
+        send_styl(cm.getValue());
+      });
+    }
   }
   else if (mode == "javascript") {
     editor.on("change", function(cm) {
@@ -278,28 +286,6 @@ socket.on('message', function(msg) {
 //     }
 //   }
 // });
-
-
-
-// ========================
-
-// C O L O R S   ( H U S L p )
-
-
-var css = "";
-for (var i = 0; i < 100; i++) {
-  var col = $.husl.p.toHex(((i / 40) * 360), 80, 65);
-  var className = ".cm-s-loop-light .cm-semantic-" + i;
-  css += className + " { color: " + col + "}\n"; 
-}
-
-for (var i = 0; i < 100; i++) {
-  var col = $.husl.p.toHex(((i / 40) * 360), 50, 50);
-  var className = ".cm-s-loop-dark .cm-semantic-" + i;
-  css += className + " { color: " + col + "}\n"; 
-}
-add_style_sheet(css);
-
 
 
 // ========================
@@ -432,24 +418,32 @@ function toggle_theme() {
 
 function send() {
   socket.emit('message', {
-    "css": $edit.innerText,
-    "ID": socket_id
+    css: $edit.innerText,
+    ID: socket_id
   });
 }
 
 function send_css(css) {
   socket.emit('message', {
-    "css": css,
-    "ID": socket_id
+    css: css,
+    ID: socket_id
   });
 }
 
 function send_scss(scss) {
   socket.emit('message', {
-    "scss": scss,
-    "ID": socket_id
+    scss: scss,
+    ID: socket_id
   });
 }
+
+function send_styl(styl) {
+  socket.emit('message', {
+    styl: styl,
+    ID: socket_id
+  });
+}
+
 
 function send_script(script, url) {
   socket.emit('message', {
@@ -506,213 +500,11 @@ function clear_highlight(s) {
 // =============
 
 
-if ($edit) {
-  $edit.addEventListener("keyup", function(e){
-    send();
-  }, false);
-
-
-  // Ajax get
-  // -------
-
-  var xmlhttp = new XMLHttpRequest();
-
-  xmlhttp.onreadystatechange = function() {
-      if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-
-          var txt = xmlhttp.responseText;
-
-          var lines = txt.split("\n");
-
-          // SPLIT
-          for (var i = 0; i < lines.length; i++) {
-            // var words = lines[i].split(" ");
-            if (lines[i].indexOf("{") !== -1 ) {
-              var parts = lines[i].split("{");
-              lines[i] = [
-                {
-                  sel: true,
-                  str: parts[0]
-                },
-                {
-                  str: "{"
-                },
-                {
-                  str: parts[1]
-                }
-              ];
-            }
-            else {
-              var parts = lines[i].split(" ");
-              var arr = [];
-              for (var j = 0; j < parts.length; j++) {
-                var is_number = false;
-                // if (/([0-9]+([a-z]{2}|%))/.test(parts[j])) {
-                if (/([0-9]+)/.test(parts[j])) {
-                  is_number = true;
-                }
-                arr.push({
-                  numerical: is_number,
-                  str: parts[j]
-                });
-                arr.push({
-                  str: " "
-                });
-              }
-              lines[i] = arr;
-            }
-
-          }
-
-          // RECOMBINE
-          for (var i = 0; i < lines.length; i++) {
-            var words = lines[i];
-
-            for (var j = 0; j < words.length; j++) {
-              if (words[j].sel) {
-                var sel = words[j].str.trim();
-                sel = sel.replace(/(\s|^)([\*a-zA-Z]+[1-7]{0,1})/g, function(match, grp){
-                  return '<span class="sel-name">' + match + '</span>';
-                });
-                sel = sel.replace(/#([a-zA-Z]*)/, function(match, grp){
-                  return '<span class="sel-id">' + match + '</span>';
-                });
-                sel = sel.replace(/(\.-?[_a-zA-Z]+[_a-zA-Z0-9-]*)/g, function(match, grp){
-                  return '<span class="sel-class">' + match + '</span>';
-                });
-                words[j].str = words[j].str.replace(words[j].str.trim(), '<span data-selector>' + sel + '</span>');
-              }
-
-              else if (words[j].numerical) {
-                var str = words[j].str.trim();
-                var val = parseFloat(str);
-                var min, max, step, unit;
-                if (str.indexOf("em") !== -1) {
-                  min = -2;
-                  max = 10;
-                  step = 0.1;
-                  unit = "em";
-                }
-                else if (str.indexOf("px") !== -1) {
-                  min = -20;
-                  max = 200;
-                  step = 1;
-                  unit = "px";
-                }
-                else if (str.indexOf("vw") !== -1) {
-                  min = -10;
-                  max = 100;
-                  step = 1;
-                  unit = "vw";
-                }
-                else if (str.indexOf("%") !== -1) {
-                  min = -10;
-                  max = 200;
-                  step = 1;
-                  unit = "%";
-                }
-
-                // var input = '<input type="range" value="' + val + '" min="' + min + '" max="' + max + '" step="' + step + '"/> <span class="rangeDat">' + val + '</span>';
-
-
-                var input = '<span class="slider"></span><span class="slider-val">' + val + '</span>';
-
-
-
-                words[j].str = words[j].str.replace(val, input );
-              }
-              else if (words[j].str == "black;") {
-                words[j].str = '<input class="color" type="text" value="#000">;';
-              }
-              else if (words[j].str == "white;") {
-                words[j].str = '<input class="color" type="text" value="#fff">;';
-              }
-              else if (words[j].str == "blue;") {
-                words[j].str = '<input class="color" type="text" value="#00f">;';
-              }
-              // else if (words[j].str == "2em;") {
-              //   words[j].str = '<input type="range" value="2" min="0" max="30" step="0.1"/> <span class="rangeafter">2</span>em;';
-              // }
-              // else if (words[j].str == "28px/1.25") {
-              //   words[j].str = '<input type="range" value="28" min="0" max="50" step="1"/> <span class="rangeafter">28</span>px/1.25';
-              // }
-            }
-            lines[i] = words.reduce(function(prev, curr, i, arr){
-              return prev + curr.str;
-            }, "");
-          }
-
-          var html = lines.join("\n");
-
-          document.getElementById("edit").innerHTML = html;
-
-
-
-          $(".color").minicolors({
-            opacity: false,
-            change: function(hex, opacity) {
-              this.parentNode.querySelector(".minicolors-swatch-color").innerText = hex;
-              send();
-            }
-          });
-          $(".color").each(function(){
-            this.parentNode.querySelector(".minicolors-swatch-color").innerText = this.value;
-          });
-
-
-
-          // $("input[type=range]").on("mousemove change", function(e){
-          //   $(this).next().html( $(this).val() );
-          //     send();
-          // });
-
-
-          var sliders = document.querySelectorAll(".slider");
-          for (var i = 0; i < sliders.length; i++) {
-            new Slider(sliders[i]);
-          }
-
-
-          $("[data-selector]").hover(function(e){
-            var s = this.innerText;
-            send_highlight(s);
-          }, function(e){
-            var s = this.innerText;
-            clear_highlight(s);
-          });
-
-      }
-  }
-
-  xmlhttp.open("GET", "../sketch/style.css", true);
-  xmlhttp.send();
-}
-
-
-
-// ==============================
-
-// D O M  U T I L I T I E S
-
-
-function add_style_sheet(css) {
-  var head, styleElement;
-  head = document.getElementsByTagName('head')[0];
-  styleElement = document.createElement('style');
-  styleElement.setAttribute('type', 'text/css');
-  if (styleElement.styleSheet) {
-    styleElement.styleSheet.cssText = css;
-  } else {
-    styleElement.appendChild(document.createTextNode(css));
-  }
-  head.appendChild(styleElement);
-  return styleElement;
-}
-
 function get_mode_from_extension(ext) {
   if (ext == "html") return "text/html";
   else if (ext == "css") return ext;
   else if (ext == "scss") return "text/x-scss";
+  else if (ext == "styl") return "text/x-scss";
   else if (ext == "js") return "javascript";
 }
 

@@ -259,6 +259,9 @@ CodeMirror.defineMode("javascript", function(config, parserConfig) {
           // console.log(content + ": " + Math.abs(hash%20) );
           var color = Math.abs(hashCode(content) % 100);
 
+          // skip these
+          if (content == "document" || content == "console" || content == "Math") return cx.marked;
+
           if (cx.marked) return cx.marked + " semantic-" + color;
           if (inScope(state, content)) return "variable-2" + " semantic-" + color;
 
