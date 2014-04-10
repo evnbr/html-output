@@ -146,7 +146,7 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
           break;
         }
       }
-      return "string";
+      return "string"; //  attr-string
     };
     closure.isInAttribute = true;
     return closure;
@@ -247,9 +247,13 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
     return closeState(type, stream, state);
   }
 
+
+  var last_attr_key = "";
   function attrState(type, _stream, state) {
     if (type == "word") {
-      setStyle = "attribute";
+      last_attr_key = _stream.current();
+      setStyle = "attribute attrkey-" + last_attr_key; // eeeee -EB
+
       return attrEqState;
     } else if (type == "endTag" || type == "selfcloseTag") {
       var tagName = state.tagName, tagStart = state.tagStart;
@@ -272,7 +276,7 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
     return attrState(type, stream, state);
   }
   function attrValueState(type, stream, state) {
-    if (type == "string") return attrContinuedState;
+    if (type == "string") { setStyle = "string attrval attrval-" + last_attr_key; return attrContinuedState; };
     if (type == "word" && Kludges.allowUnquoted) {setStyle = "string"; return attrState;}
     setStyle = "error";
     return attrState(type, stream, state);

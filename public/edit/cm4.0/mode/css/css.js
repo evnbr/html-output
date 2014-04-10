@@ -42,7 +42,7 @@ CodeMirror.defineMode("css", function(config, parserConfig) {
       return state.tokenize(stream, state);
     } else if (ch == "#") {
       stream.eatWhile(/[\w\\\-]/);
-      return ret("atom", "hash");
+      return ret("color", "hash"); // atom --> color
     } else if (ch == "!") {
       stream.match(/^\s*\w*/);
       return ret("keyword", "important");
@@ -66,6 +66,26 @@ CodeMirror.defineMode("css", function(config, parserConfig) {
       stream.backUp(1);
       state.tokenize = tokenParenthesized;
       return ret("property", "word");
+    } else if (
+      ch == "r"
+      && (
+          stream.match(/gb\(([0-9]*[\s]*){3}\)/) ||
+          stream.match("gba(")
+        )
+      ) {
+      stream.backUp(1);
+      //state.tokenize = tokenParenthesized;
+      return ret("color", "keyword");
+    // } else if (
+    //   ch == "h"
+    //   && (
+    //       stream.match("sl(") ||
+    //       stream.match("sla(")
+    //     )
+    //   ) {
+    //   stream.backUp(1);
+    //   //state.tokenize = tokenParenthesized;
+    //   return ret("color", "keyword");
     } else if (/[\w\\\-]/.test(ch)) {
       stream.eatWhile(/[\w\\\-]/);
       return ret("property", "word");
@@ -132,7 +152,7 @@ CodeMirror.defineMode("css", function(config, parserConfig) {
     if (valueKeywords.hasOwnProperty(word))
       override = "atom";
     else if (colorKeywords.hasOwnProperty(word))
-      override = "keyword";
+      override = "keyword color color-" + word;
     else
       override = "variable";
   }

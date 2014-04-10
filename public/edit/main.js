@@ -7,14 +7,6 @@ if ( !String.prototype.contains ) {
   };
 }
 
-// var editor = ace.edit("editscript");
-// editor.setTheme("ace/theme/dawn");
-// editor.getSession().setMode("ace/mode/javascript");
-// editor.getSession().setUseSoftTabs(true);
-// editor.setShowFoldWidgets(false);
-// // editor.setShowInvisibles(true);
-// document.getElementById('editscript').style.fontSize='14px';
-
 $edit = document.getElementById("edit");
 $editscript = document.getElementById("editscript");
 
@@ -36,9 +28,6 @@ var file_arr = [
   "style.scss",
   "index.html",
   "script.js",
-  "test.txt",
-  "test2.txt",
-  "test3.txt",
 ];
 
 for (var i = 0; i < file_arr.length; i++) {
@@ -61,7 +50,7 @@ function make_tab(index, filename) {
   tab_nav.appendChild(tab);
 
   var tab_panel = document.createElement("div");
-  tab_panel.className = escaped + " tab";
+  tab_panel.className = escaped + " cm-mode-" + ext +" tab";
   tab_panel.setAttribute("data-tabpanel", escaped); 
   tab_content.appendChild(tab_panel);
 
@@ -77,7 +66,8 @@ function make_tab(index, filename) {
     lineWrapping: true,
     gutters: ["CodeMirror-lint-markers"],
     lint: (mode == "javascript"),
-    // extraKeys: {"Ctrl-Space": "autocomplete"},
+    keyMap: "sublime",
+    theme: "loop-light",
     extraKeys: {
       "Tab": function(cm) {
         var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
@@ -92,11 +82,15 @@ function make_tab(index, filename) {
         });
       }
     },
-    keyMap: "sublime",
-    theme: "loop-light"
   });
 
   var timeout;
+  var hinter = "";
+
+  if (ext == "js") hinter = "javascript";
+  else if (ext == "html") hinter = "html";
+  else if (ext == "css" || ext=="scss") hinter = "css";
+
   editor.on("inputRead", function(cm) {
       if(timeout) clearTimeout(timeout);
 
@@ -105,72 +99,36 @@ function make_tab(index, filename) {
 
       if (/^[A-Za-z]/.test(ltr)) {
         timeout = setTimeout(function() {
-            CodeMirror.showHint(cm, CodeMirror.hint.javascript, {completeSingle: false});
+            CodeMirror.showHint(cm, CodeMirror.hint[hinter], {completeSingle: false});
         }, 150);
       }
   });
+
   editor.on("renderLine", function(cm, line, el) {
     // var nums = el.querySelectorAll(".cm-number");
   });
   editor.on("focus", function(cm) {
     var tabname = cm.display.wrapper.parentNode.getAttribute("data-tabpanel");
-    set_tab_by_name(tabname);
+    if (curr_tab && cm !== curr_tab.cm) {
+      set_tab_by_name(tabname);
+    }
   });
   editor.on("change", function(cm, change) {
 
-    var start_line = change.from.line;
-    var end_line = change.to.line;
-
-
-    for (var j = start_line; j <= end_line; j++ ) {
-      // Identify line that was changed
-      var line_num = j;
-      var line = cm.getLineHandle(line_num);
-      
-      // Find all widget marks on this line and clear them
-      var marks = cm.findMarks(
-        {line: line_num, ch: 0 },
-        {line: line_num, ch: line.text.length }
-      );
-      for (var i = 0; i < marks.length; i++) {
-        marks[i].clear();
-      }
-
-      // Scan through this line and insert widget marks
-      var prev, curr, pos, type;
-      for (var ch = 0; ch < line.text.length; ch++) {
-        pos = {line: line_num, ch: ch}
-        type = cm.getTokenTypeAt(pos);
-        if (type) curr = type.contains("number");
-        else curr = false;
-
-        if (curr && !prev) {
-          var insert_pos = {line: line_num, ch: ch - 1};
-          var sl = get_slider();
-          var widg = cm.setBookmark(
-            insert_pos,
-            {
-              widget: sl.el,
-              insertLeft: true
-            }
-          );
-          sl.slider.widget = widg;
-        }
-        prev = curr;
-      }
-    }
+    // widgetize(cm, change.from.line, change.to.line);
   });
 
-  open(filename, function(data){
+  open(filename, function(cm, data){
     editor.setValue(data);
+    setTimeout(function(cm){widgetize(cm, 0, 25);}, 300);
   });
 
-  var left = index * 600;
-  tab_panel.style.webkitTransform = "translate3d(" + left + "px,0,0)";
+  // var left = index * 700;
+  // tab_panel.style.webkitTransform = "translate3d(" + left + "px,0,0)";
 
   nav[filename] = {
     cm: editor,
-    left: left,
+    // left: left,
     panel: tab_panel,
     title: filename,
     save_state: "Just opened"
@@ -209,6 +167,57 @@ function make_tab(index, filename) {
 
 
 
+
+function widgetize(cm, start, end) {
+  var start_line = start;
+  var end_line = end;
+
+
+  for (var j = start_line; j <= end_line; j++ ) {
+    // Identify line that was changed
+    var line_num = j;
+    var line = cm.getLineHandle(line_num);
+    
+    // Find all widget marks on this line and clear them
+    var marks = cm.findMarks(
+      {line: line_num, ch: 0 },
+      {line: line_num, ch: line.text.length }
+    );
+    for (var i = 0; i < marks.length; i++) {
+      marks[i].clear();
+    }
+
+    // Scan through this line and insert widget marks
+    var prev, curr, pos, type;
+    for (var ch = 0; ch < line.text.length; ch++) {
+      pos = {line: line_num, ch: ch}
+      type = cm.getTokenTypeAt(pos);
+      if      (type && type.contains("number")) curr = "number";
+      else if (type && type.contains("color"))  curr = "color";
+      else    curr = false;
+
+      if (curr && (curr !== prev)) {
+        var insert_pos = {line: line_num, ch: ch - 1};
+        var w;
+        if (curr == "number") {
+          var w = get_slider();
+        }
+        else if (curr == "color") {
+          var w = get_colorpicker();
+        }
+        var widg = cm.setBookmark(
+          insert_pos,
+          {
+            widget: w.el,
+            insertLeft: true
+          }
+        );
+        w.obj.setWidget(widg);
+      }
+      prev = curr;
+    }
+  }
+}
 
 // $(window).resize(function(e){
 //   editor.refresh();
@@ -279,14 +288,14 @@ socket.on('message', function(msg) {
 
 var css = "";
 for (var i = 0; i < 100; i++) {
-  var col = $.husl.p.toHex(((i / 40) * 360), 80, 55);
-  var className = ".cm-s-loop-light .cm-color-" + i;
+  var col = $.husl.p.toHex(((i / 40) * 360), 80, 65);
+  var className = ".cm-s-loop-light .cm-semantic-" + i;
   css += className + " { color: " + col + "}\n"; 
 }
 
 for (var i = 0; i < 100; i++) {
   var col = $.husl.p.toHex(((i / 40) * 360), 50, 50);
-  var className = ".cm-s-loop-dark .cm-color-" + i;
+  var className = ".cm-s-loop-dark .cm-semantic-" + i;
   css += className + " { color: " + col + "}\n"; 
 }
 add_style_sheet(css);
@@ -331,27 +340,36 @@ function set_tab(tab_el) {
   var tabs_width = 1800;
   var body_width = $("body").width();
 
+  if (newleft > 1) {
+    console.log("slid too far");
+  }
+
   // console.log(tabs_width + 500);
   // console.log(body_width + 500);
-  // console.log(newleft);
 
   // if (newleft > body_width + 500) {
   //   newleft = body_width + 500;
   // }
 
-  var i = 0;
-  for (tabname in nav) {
-    var t = nav[tabname];
-    t.left = t.left - newleft + 20;
-    t.panel.style.webkitTransform = "translate3d(" + t.left + "px,0,0)";
-    // t.panel.style.webkitTransitionDelay = 30*i + "ms";
-    i++;
-  }
+  // var i = 0;
+  // for (tabname in nav) {
+  //   var t = nav[tabname];
+  //   t.left = t.left - newleft + 0;
+  //   var displayleft = t.left;
+  //   // if (displayleft < 0) displayleft = 0;
+  //   // if (displayleft > body_width) t.panel.style.display = "none";
+  //   // else t.panel.style.display = "inline-block";
+  //   t.panel.style.webkitTransform = "translate3d(" + displayleft+ "px,0,0)";
+  //   // t.panel.style.webkitTransitionDelay = 30*i + "ms";
+  //   i++;
+  // }
+
+  curr_tab.cm.focus();
 
   document.getElementById("save_status").innerText = curr_tab.save_state;
 }
 
-set_tab(document.querySelectorAll("[data-tab]")[0]);
+set_tab(document.querySelectorAll("[data-tabname]")[0]);
 
 
 // ========================
@@ -393,6 +411,7 @@ for (var i = 0; i < actions.length; i++ ) {
 
 function toggle_theme() {
   $("body").toggleClass("dark-theme");
+  console.log("hey");
   if (curr_tab.cm.getOption("theme") !== "loop-dark") {
     curr_tab.cm.setOption("theme", "loop-dark");
   }
@@ -482,121 +501,6 @@ function clear_highlight(s) {
   });
 }
 
-
-// ================
-
-
-function Slider(el) {
-  var self = this;
-  var $el = $(el);
-
-  $el.attr("tabindex", 0);
-  $el.html('<div class="slider-rail"></div><div class="slider-thumb"></div>');
-
-  var $rail = $el.find(".slider-rail");
-  var $thumb = $el.find(".slider-thumb");
-  var $val = $el.next();
-  var dragging = false;
-  var start = {x:0, y:0};
-  var delt = {x:0, y:0};
-  var val = 0;
-  var ext = "";
-  var strtval = 0;
-  var step = 1;
-  var curr_text = "";
-  var strt_text = "";
-  var pos;
-
-  // $el.attr("contenteditable", false);
-  // $rail.attr("contenteditable", false);
-  // $thumb.attr("contenteditable", false);
-
-
-  $thumb.mousedown(function(e){
-
-    dragging = true;
-    $val = $el.parent().next();
-    $el.addClass("dragging");
-    $("body").addClass("dragging");
-    start.x = e.clientX;
-    start.y = e.clientY;
-    delt.x = 0;
-    delt.y = 0;
-    strt_text = $val.html();
-    val = parseFloat(strt_text);
-    ext = strt_text.replace(/([-0-9.]*)/ , "");
-    strtval = val;
-
-    if (ext == "em") step = 0.05;
-    else if (ext == "" && val < 3) step = 0.1; 
-    else step = 1;
-
-    curr_text = strt_text;
-    pos = self.widget.find();
-  });
-
-  $("html").mousemove(function(e){
-    if (dragging) {
-
-      delt.x = e.clientX - start.x;
-      delt.y = e.clientY - start.y;
-
-      val = Math.round((strtval - parseInt(delt.y * 0.3) * step) * 100) / 100;
-
-
-      curr_tab.cm.replaceRange(
-        (val + ext),
-        pos,
-        {
-          line: pos.line,
-          ch: (pos.ch + curr_text.length)
-        }
-      );
-      curr_text = val + ext;
-
-      $rail.css({
-        "-webkit-transform": "translate3d(0, " + delt.y + "px, 0)"
-      });
-    }
-  });
-  $("html").mouseup(function(){
-    dragging = false;
-    $(".dragging").removeClass("dragging");
-    $rail.css({
-      "-webkit-transform": ""
-    });
-  });
-
-  $el.keydown(function(e){
-    // UP KEY
-    if (e.keyCode == 38) {
-      e.preventDefault();
-      val += step;
-      $val.html(val);
-      send();
-    }
-    // DOWN KEY
-    else if (e.keyCode == 40) {
-      e.preventDefault();
-      val -= step;
-      $val.html(val);
-      send();
-    }
-
-  });
-}
-
-
-// ==========
-
-
-function get_slider() {
-  var val = 0;
-  var el = document.createElement('span');
-  el.className = 'slider';
-  var slider = new Slider(el);
-  return {slider: slider, el: el};
-}
 
 
 // =============

@@ -17,8 +17,7 @@ body {
   margin: 0px;
   background: #fff;
   padding-top: 2em;
-  color: #4c6770;
-  font: 400 14px/1.4 "National";
+  color: #000;
   font: 400 12px/1.4 "Lucida Grande";
 }
 ::-webkit-scrollbar-thumb {
@@ -30,15 +29,6 @@ body {
 a:link,
 a:visited {
   color: inherit;
-}
-.error {
-  color: #ff0;
-  margin-bottom: 3em;
-  min-height: 2em;
-  opacity: 0.8;
-}
-.error .error-type {
-  display: none;
 }
 .actions {
   position: absolute;
@@ -84,10 +74,10 @@ h2 {
   display: inline-block;
   padding: 0.8em 1.5em;
   text-decoration: none;
-  opacity: 0.3;
+  color: #bbb;
 }
 .nav .activetab {
-  opacity: 1;
+  color: #00a3ff;
 }
 .dark-theme .nav {
   background: #222;
@@ -125,13 +115,6 @@ h2 {
   display: block;
   opacity: 1;
   -webkit-transform: translate3d(0, 0, 0);
-}
-.cm-mode-scss {
-  background: #fcfaf2;
-  background: #fdfaed;
-}
-.cm-mode-js {
-  background: #f5fafa;
 }
 .CodeMirror {
 /* Set height, width, borders, and global font properties here */
@@ -247,4 +230,25 @@ h2 {
 .colorpicker-swatch:hover {
   box-shadow: 0 0 0 1px #f0f;
   z-index: 999;
+}
+@media (min-width: 1500px) {
+  body {
+    padding-top: 1em;
+  }
+  .nav {
+    width: 200px;
+    bottom: 0;
+    right: auto;
+    border: 0;
+    border-right: 1px solid #ddd;
+  }
+  .nav a {
+    display: block;
+  }
+  .tabs {
+    padding-left: 200px;
+  }
+  .CodeMirror {
+    padding-top: 1em;
+  }
 }

@@ -1,7 +1,7 @@
 /* The lint marker gutter */
 .CodeMirror-lint-markers {
   width: 10px;
-  left: 1000px;
+  left: 400px;
 }
 
 .CodeMirror-gutter-elt:hover {

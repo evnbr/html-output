@@ -1,3 +1,11 @@
+$color      = black
+$bg         = white
+$graytext   = #bbb
+$activetext = rgb(0, 163, 255)
+$redcolor   = #991616
+
+// -------------------
+// R E S E T
 * 
   margin: 0
   padding: 0
@@ -5,12 +13,11 @@
   -webkit-box-sizing: border-box
   box-sizing: border-box
   font: inherit
-  // -webkit-font-smoothing: antialiased
   text-rendering: optimizeLegibility
   -webkit-user-select: none
 
-$color: black //#A1B0C6
-$bg: white //#2F353F
+// -------------------
+// G E N E R A L
 
 body, html
   overflow: hidden
@@ -18,18 +25,17 @@ body, html
 
 body
   margin: 0px
-  // background: $bg
+  background: $bg
   padding-top: 2em
-  color: #4C6770 //$color
-  // -webkit-transition: background 0.1s, color 0.1s
-  font: 400 14px/1.4 "National"
+  color: $color
   font: 400 12px/1.4 "Lucida Grande"
 
 
 //::-webkit-scrollbar-button       
 //::-webkit-scrollbar-track      
 //::-webkit-scrollbar-track-piece  
-
+//::-webkit-scrollbar-corner       
+//::-webkit-resizer               
 
 ::-webkit-scrollbar-thumb
   background: rgba(0,0,0,0.05)
@@ -38,23 +44,8 @@ body
   width: 5px
 
 
-//::-webkit-scrollbar-corner       
-//::-webkit-resizer               
-
-
 a:link, a:visited
   color: inherit
-
-.error
-  color: yellow
-  margin-bottom: 3em
-  min-height: 2em
-  opacity: 0.8
-  .error-type
-    display: none
-    //text-transform: uppercase
-    //font-size: 0.7rem
-    //letter-spacing: 1px
 
 .actions
   position: absolute
@@ -86,23 +77,21 @@ h2
     color: white
 
 .nav
-  // background: lighten($bg, 5)
   position: fixed
   z-index: 10
   top: 0
   left: 0
   right: 0
   border: 0
-  //background: #e4e4e4
   background: white
   border-bottom: 1px solid #eee
   a
     display: inline-block
     padding: 0.8em 1.5em
-    text-decoration: none
-    opacity: 0.3
+    text-decoration none
+    color    $graytext
   .activetab
-    opacity: 1
+    color    $activetext
 
 .dark-theme .nav
   background: #222
@@ -112,7 +101,7 @@ h2
   display: inline-block
   padding: 0.8em 1em
   margin-bottom: 1em
-  background: lighten($bg, 5)
+  background: red
   color: white
   text-decoration: none
 
@@ -127,53 +116,22 @@ h2
   overflow: hidden
 
 .tab
-  // -webkit-transform: translate3d(90%, 0, 0)
-  -webkit-transition: all 0.3s cubic-bezier(0.220, 1.10, 0.365, 1.000)
+  // -webkit-transition: all 0.3s cubic-bezier(0.220, 1.10, 0.365, 1.000)
+  -webkit-transition: all 0.1s
   position: absolute
   top: 0
   bottom: 0
-  //left: 0
-  //right: 0
-  // display: none
+  left: 0
+  right: 0
+  display: none
   vertical-align: top
-  width: 700px
+  // width: 700px
   background: white
   // border-left: 1px solid rgba(0,0,0,0.1)
   &.active
-    // display: block
+    display: block
     opacity: 1
-    // background: white
     -webkit-transform: translate3d(0, 0, 0)
-
-.cm-mode-scss
-  background: #FCFAF2
-  background: #FDFAED
-
-.cm-mode-js
-  background: #F5FAFA
-
-.editor
-  font: 400 14px/1.8 "Consolas"
-  // letter-spacing: -1px
-  // color: rgba(white, 0.05)
-  &:focus
-    outline: none
-  .minicolors-theme-default .minicolors-input
-    width: 0
-    height: 0
-    padding: 0
-    border: 0
-  .minicolors-theme-default .minicolors-swatch 
-    top: 0
-    left: 0
-    width: 100%
-    height: 100%
-    -webkit-transition: all 0.2s
-    cursor: pointer
-  .minicolors-theme-default .minicolors-swatch:hover
-    // -webkit-transform: scale(0.9)
-  .minicolors-theme-default .minicolors-swatch:active
-    // -webkit-transform: scale(0.8)
 
 
 .CodeMirror
@@ -181,7 +139,7 @@ h2
   color: #535353
   top: 2.8em
   left: 0
-  bottom: 0
+  bottom: 0 
   padding-left: 1em
   padding-right: 1em
   height: calc(100vh - 2.8em)
@@ -206,13 +164,10 @@ h2
 
 
 .dragging
-  // color: rgba(white, 0.4) !important
   cursor: ns-resize
   *
     -webkit-user-select: none !important
 
-
-$redcolor: #991616 // #00A3FF //#D50000
 
 .slider
   display: inline-block
@@ -235,7 +190,7 @@ $redcolor: #991616 // #00A3FF //#D50000
   &:hover
     opacity: 1
     .slider-thumb
-      background: lighten($redcolor, 60)
+      background: lighten($redcolor, 55)
       top: -2px
       height: 18px
     .slider-rail
@@ -291,38 +246,6 @@ $redcolor: #991616 // #00A3FF //#D50000
     z-index: 999
 
 
-
-
-
-input[type="range"]
-  -webkit-appearance: none
-  height: 1px
-  width: 150px
-  vertical-align: middle
-  background: $color
-  opacity: 0.4
-  -webkit-transition: all 0.1s
-  &:focus
-    outline: none
-    background: yellow
-    &::-webkit-slider-thumb
-      border-color: yellow
-  &:hover
-    opacity: 1
-    &::-webkit-slider-thumb
-      height: 15px
-      width: 15px
-  &::-webkit-slider-thumb
-    -webkit-appearance: none
-    height: 10px
-    width: 10px
-    border: 1px solid $color
-    border-radius: 50%
-    cursor: pointer
-    background: $bg
-    -webkit-transition: all 0.1s
-    &:hover
-      background: lighten($bg, 10)
 
 @media (min-width: 1500px)
   body 

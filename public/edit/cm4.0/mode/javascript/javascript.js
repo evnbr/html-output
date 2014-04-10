@@ -35,7 +35,9 @@ CodeMirror.defineMode("javascript", function(config, parserConfig) {
       "in": operator, "typeof": operator, "instanceof": operator,
       "true": atom, "false": atom, "null": atom, "undefined": atom, "NaN": atom, "Infinity": atom,
       "this": kw("this"), "module": kw("module"), "class": kw("class"), "super": kw("atom"),
-      "yield": C, "export": kw("export"), "import": kw("import"), "extends": C
+      "yield": C, "export": kw("export"), "import": kw("import"), "extends": C,
+
+      // "rect": A, "background": A, "document": A, "console": A
     };
 
     // Extend the 'normal' keywords with the TypeScript language extensions
@@ -257,10 +259,10 @@ CodeMirror.defineMode("javascript", function(config, parserConfig) {
           // console.log(content + ": " + Math.abs(hash%20) );
           var color = Math.abs(hashCode(content) % 100);
 
-          if (cx.marked) return cx.marked + " color-" + color;
-          if (inScope(state, content)) return "variable-2" + " color-" + color;
+          if (cx.marked) return cx.marked + " semantic-" + color;
+          if (inScope(state, content)) return "variable-2" + " semantic-" + color;
 
-          return type + " color-" + color;
+          return type + " semantic-" + color;
         }
 
         return style;

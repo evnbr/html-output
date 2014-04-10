@@ -1,5 +1,5 @@
-$num: 56px;
-$col: hsl(162,13,59); 
+$num: 50px;
+$col: rgb(162,13,59); 
 
 * {
   padding: 0;
@@ -12,26 +12,37 @@ $col: hsl(162,13,59);
 }
 
 html {
-  font: 55px / 1 "Arial", sans-serif;  
+  font: 39px / 1.1 "Arial", sans-serif; 
 }
-
-body {
-  color: black;
-  background: white;
+ 
+body { 
+  color: black; 
+  background: white; 
   margin-bottom: 90vh; 
-  color: darken($col, 20); 
+  color: darken($col, 19);
 }
 
 #content {
   position: relative;
+  color: #123456;
+  color: #af2;
+  color: rgb(0,0,255);
+  color: hsl(0,0,0);
+  color: rgba(0,0,255,0);
+  color: hsla(0,0,0,0);
+  div {
+    color: #123;
+    color: red;
+  }
 }
 
 h1 {
   font-weight: bold;
   display: inline-block;
-  font-size: 1.4em; 
+  font-size: $num * 2; 
   padding-bottom: 0.5em;
   color: darken($col, 20);
+  border-bottom: $num / 3 solid black
 }
 
 a:link, a:visited {

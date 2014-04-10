@@ -1,10 +1,11 @@
-var express = require('express')
-  , http = require('http')
-  , app = express()
+var express      = require('express')
+  , http         = require('http')
+  , app          = express()
   , socketServer = http.createServer(app)
-  , io = require('socket.io').listen(socketServer)
-  , fs = require('fs')
-  , sass = require('node-sass')
+  , io           = require('socket.io').listen(socketServer)
+  , fs           = require('fs')
+  , stylus       = require('stylus')
+  , sass         = require('node-sass')
   ;
 
 // function handler (req, res) {
@@ -14,7 +15,14 @@ var express = require('express')
 // }
 
 
+app.use(stylus.middleware({
+  src: __dirname + '/resources',
+  dest: __dirname + '/public',
+  debug: true,
+  force: true
+}));
 app.use(express.static(__dirname + '/public'));
+// app.use(express.errorHandler());
 
 var server = socketServer.listen(process.env.PORT || 3000, function() {
     console.log('Listening on port %d', server.address().port);

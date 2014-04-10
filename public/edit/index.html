@@ -11,15 +11,14 @@
              user-scalable=no"/>
 
   <!-- App CSS -->
-	<link href="style.css" rel="stylesheet" type="text/css">
+	<link href="../app.css"      rel="stylesheet" >
+  <link href="../loop-theme.css" rel="stylesheet" >
 
   <!-- Libararies CSS -->
   <link rel='stylesheet' href='jquery.minicolors.css' />
 
   <!-- CodeMirror CSS -->
   <link rel="stylesheet" href="cm4.0/lib/codemirror.css">
-  <link rel="stylesheet" href="cm4.0/theme/loop-light.css">
-  <link rel="stylesheet" href="cm4.0/theme/loop-dark.css">
   <link rel="stylesheet" href="cm4.0/addon/lint/lint.css">
   <link rel="stylesheet" href="cm4.0/addon/hint/show-hint.css">
 
@@ -57,14 +56,17 @@
 
 <body>
 
+
   <nav id="tab_nav" class="nav">
-    <!-- <a href="#" data-tab="css">(Beta) style.css</a> -->
   </nav>
+
 
   <header class="actions">
     <!--<a href="#" data-action="reload">↺</a>-->
     <!-- <a href="/sketch/" target="_blank">Preview</a>-->
   </header>
+
+
   <footer class="actions">
     <span id="save_status">Just opened</span>
     <!-- <a href="#" data-action="save">Save</a> -->
@@ -72,15 +74,12 @@
   </footer>
 
 
-
   <div id="tab_content" class="tabs">
-    <!-- <div class="css tab">
-    	<pre id="edit" class="editor" contenteditable autocorrect="off" spellcheck="false">
-      </pre>
-    </div> -->
   </div>
 
+
   <!-- App JS -->
+  <script src="slider.js"></script>
   <script src="main.js"></script>
 
 </body>
