@@ -1,5 +1,5 @@
 {
-  "name": "html output",
+  "name": "html-output",
   "version": "0.0.1",
   "description": "Node.js html output",
   "main": "server.js",
