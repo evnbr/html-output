@@ -7,17 +7,9 @@ if ( !String.prototype.contains ) {
   };
 }
 
-$edit = document.getElementById("edit");
-$editscript = document.getElementById("editscript");
-
-var $tab_nav = document.getElementById("tab_nav");
-var $tab_content = document.getElementById("tab_content");
-
-
 // window.onbeforeunload = function() {
 //   return "Don't forget to save your changes!";
 // }
-
 
 // ========================
 
@@ -25,34 +17,36 @@ var nav = {};
 var curr_tab;
 
 var file_arr = [
-  "style.styl",
-  "index.html",
-  "script.js",
-  "style.scss",
+  "/Users/evan/Developer/htmloutput/public/sketch/style.styl",
+  "/Users/evan/Developer/htmloutput/public/sketch/index.html",
+  "/Users/evan/Developer/htmloutput/public/sketch/script.js",
+  "/Users/evan/Developer/htmloutput/public/sketch/style.scss",
 ];
 
 for (var i = 0; i < file_arr.length; i++) {
-  make_tab(i, file_arr[i]);
+  open(file_arr[i]);
 }
 
 
+function make_tab(filename, content) {
 
-function make_tab(index, filename) {
-
-  var ext = filename.split(".")[1];
+  var title = filename.replace(/^.*[\\\/]/, '');
+  var ext = title.split(".")[1];
   var mode = get_mode_from_extension(ext);
-  var escaped = filename.replace(".","_");
 
-  var tab = document.createElement("a");
-  tab.setAttribute("href", "#");
-  tab.setAttribute("data-tabname", escaped); 
-  tab.innerText = filename;
+  var tab_flap = document.createElement("a");
+  tab_flap.setAttribute("href", "#");
+  tab_flap.setAttribute("data-tabname", filename); 
+  tab_flap.innerText = title;
+  tab_flap.addEventListener("click",function(e){e.preventDefault();});
+  tab_flap.addEventListener("mousedown", click_tab, false);
 
-  tab_nav.appendChild(tab);
+
+  tab_nav.appendChild(tab_flap);
 
   var tab_panel = document.createElement("div");
-  tab_panel.className = escaped + " cm-mode-" + ext +" tab";
-  tab_panel.setAttribute("data-tabpanel", escaped); 
+  tab_panel.className = "cm-mode-" + ext +" tab";
+  tab_panel.setAttribute("data-tabpanel", filename); 
   tab_content.appendChild(tab_panel);
 
 
@@ -64,7 +58,7 @@ function make_tab(index, filename) {
     tabSize: 2,
     styleActiveLine: true,
     lineNumbers: false,
-    lineWrapping: true,
+    lineWrapping: false,
     gutters: ["CodeMirror-lint-markers"],
     lint: (mode == "javascript"),
     keyMap: "sublime",
@@ -75,7 +69,7 @@ function make_tab(index, filename) {
         cm.replaceSelection(spaces);
       },
       "Cmd-S": function(cm) {
-        save(curr_tab.title, curr_tab.cm.getValue());
+        save(curr_tab.filename, curr_tab.cm.getValue());
       },
       "Cmd-1": function(cm) {
         cm.setBookmark(cm.getCursor(), {
@@ -119,10 +113,12 @@ function make_tab(index, filename) {
     widgetize(cm, change.from.line, change.to.line);
   });
 
-  open(filename, function(cm, data){
-    editor.setValue(data);
-    setTimeout(function(cm){widgetize(cm, 0, 25);}, 300);
-  });
+  // open(filename, function(cm, data){
+  //   editor.setValue(data);
+  //   setTimeout(function(cm){widgetize(cm, 0, 25);}, 300);
+  // });
+
+  editor.setValue(content);
 
   // var left = index * 700;
   // tab_panel.style.webkitTransform = "translate3d(" + left + "px,0,0)";
@@ -130,8 +126,10 @@ function make_tab(index, filename) {
   nav[filename] = {
     cm: editor,
     // left: left,
+    flap: tab_flap, 
     panel: tab_panel,
-    title: filename,
+    title: title,
+    filename: filename,
     save_state: "Just opened"
   }
 
@@ -199,7 +197,8 @@ function widgetize(cm, start, end) {
     var prev, curr, pos, type;
     for (var ch = 0; ch < line.text.length; ch++) {
       pos = {line: line_num, ch: ch}
-      type = cm.getTokenTypeAt(pos);
+      token = cm.getTokenAt(pos);
+      type = token.type;
       if      (type && type.contains("number")) curr = "number";
       else if (type && type.contains("color"))  curr = "color";
       else    curr = false;
@@ -240,7 +239,8 @@ function widgetize(cm, start, end) {
 socket.on('message', function(msg) {
   if (msg.ID !== socket_id) {
     if (msg.from_disk) {
-      nav[msg.file_name].cm.setValue(msg.content);
+      console.log(msg);
+      make_tab(msg.file_name, msg.content);
     }
     else if (msg.confirm_save) {
       curr_tab.save_state = "Saved";
@@ -250,7 +250,7 @@ socket.on('message', function(msg) {
       var parsed = JSON.parse(msg.msg)
       var text = parsed.text;
       var cm = nav["script.js"].cm;
-
+      console.log("received message!");
 
       if (parsed.level == "error") {
         text = text.split(":")[1];
@@ -292,43 +292,36 @@ socket.on('message', function(msg) {
 
 // I N I T I I A L I Z E   T A B S
 
-var tabs = document.querySelectorAll("[data-tabname]");
-for (var i = 0; i < tabs.length; i++ ) {
-  tabs[i].addEventListener("click",function(e){
-    e.preventDefault();
-  });
-  tabs[i].addEventListener("mousedown", click_tab, false);
-}
 
 function click_tab(e) {
-  set_tab(this);
+  var tab_obj = nav[this.getAttribute("data-tabname")];
+  set_tab(tab_obj);
 }
 
-
-function set_tab_by_name(name) {
-  set_tab(document.querySelector("[data-tabname=" + name + "]"));
-}
  
-function set_tab(tab_el) {
-  var activetab = document.querySelector(".activetab");
-  if (activetab) activetab.classList.remove("activetab");
-  tab_el.classList.add("activetab");
-
-  var sel =  tab_el.getAttribute("data-tabname");
-  var active = document.querySelector(".active");
-  if (active) active.classList.remove("active");
-  document.querySelector("." + sel).classList.add("active");
-
-  curr_tab = nav[sel.replace("_",".")];
-  curr_tab.cm.refresh();
-
-  var newleft = curr_tab.left;
-  var tabs_width = 1800;
-  var body_width = $("body").width();
-
-  if (newleft > 1) {
-    console.log("slid too far");
+function set_tab(tab) {
+  if (curr_tab) {
+    var active_flap = curr_tab.flap;
+    var active_panel = curr_tab.panel;
+    active_flap.classList.remove("activetab");
+    active_panel.classList.remove("active");
   }
+  tab.flap.classList.add("activetab");
+  tab.panel.classList.add("active");
+
+  curr_tab = tab;
+  curr_tab.cm.refresh();
+  curr_tab.cm.focus();
+
+  document.getElementById("save_status").innerText = curr_tab.save_state;
+
+  // var newleft = curr_tab.left;
+  // var tabs_width = 1800;
+  // var body_width = $("body").width();
+
+  // if (newleft > 1) {
+  //   console.log("slid too far");
+  // }
 
   // console.log(tabs_width + 500);
   // console.log(body_width + 500);
@@ -350,12 +343,9 @@ function set_tab(tab_el) {
   //   i++;
   // }
 
-  curr_tab.cm.focus();
-
-  document.getElementById("save_status").innerText = curr_tab.save_state;
 }
 
-set_tab(document.querySelectorAll("[data-tabname]")[0]);
+// set_tab(document.querySelectorAll("[data-tabname]")[0]);
 
 
 // ========================
@@ -398,11 +388,14 @@ for (var i = 0; i < actions.length; i++ ) {
 function toggle_theme() {
   $("body").toggleClass("dark-theme");
   console.log("hey");
-  if (curr_tab.cm.getOption("theme") !== "loop-dark") {
-    curr_tab.cm.setOption("theme", "loop-dark");
+
+  var newtheme = "loop-light";
+  if ($("body").hasClass("dark-theme")) {
+    newtheme = "loop-dark";
   }
-  else {
-    curr_tab.cm.setOption("theme", "loop-light");
+
+  for (file in nav) {
+    nav[file].cm.setOption("theme", newtheme)
   }
 }
 
@@ -465,7 +458,8 @@ function save(filename, txt) {
   });
 }
 
-function open(filename, callback) {
+function open(filename) {
+
   socket.emit('message', {
     open: true,
     file_name: filename,

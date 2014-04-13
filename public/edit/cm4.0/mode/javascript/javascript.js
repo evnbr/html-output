@@ -257,10 +257,10 @@ CodeMirror.defineMode("javascript", function(config, parserConfig) {
 
         if (type == "variable" || type == "def") {
           // console.log(content + ": " + Math.abs(hash%20) );
-          var color = Math.abs(hashCode(content) % 100);
+          var color = Math.abs(hashCode(content) % 60);
 
           // skip these
-          if (content == "document" || content == "console" || content == "Math") return cx.marked;
+          if (content == "documentzzzz" || content == "console" || content == "Math") return cx.marked;
 
           if (cx.marked) return cx.marked + " semantic-" + color;
           if (inScope(state, content)) return "variable-2" + " semantic-" + color;
@@ -274,15 +274,18 @@ CodeMirror.defineMode("javascript", function(config, parserConfig) {
   }
 
   var hashCode = function(str){
-    var hash = 0, len = str.length, char;
-    if (str.length == 0) return hash;
 
-    for (i = 0; i < len; i++) {
-        char = str.charCodeAt(i);
-        hash = hash * 31 + str.charCodeAt(i);
-        hash = hash & hash; // Convert to 32bit integer
-    }
-    return hash;
+    return str.charCodeAt(0)*100 + (str.charCodeAt(1) || 0)*10 + (str.charCodeAt(2) || 0);
+
+    // var hash = 0, len = str.length, char;
+    // if (str.length == 0) return hash;
+
+    // for (i = 0; i < len; i++) {
+    //     char = str.charCodeAt(i);
+    //     hash = hash * 31 + str.charCodeAt(i);
+    //     hash = hash & hash; // Convert to 32bit integer
+    // }
+    // return hash;
   }
 
 

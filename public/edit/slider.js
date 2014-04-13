@@ -1,16 +1,16 @@
 // ================
 
+var mousedowns = 0;
 
 function Slider(el) {
-  console.log("built slider");
+  // console.log("built slider");
   var self = this;
   var $el = $(el);
 
-  $el.attr("tabindex", 0);
-  $el.html('<div class="slider-rail"></div><div class="slider-thumb"></div>');
+  $el.html('<div class="slider-thumb"></div>');
 
-  var $rail = $el.find(".slider-rail");
   var $thumb = $el.find(".slider-thumb");
+  $thumb.attr("tabindex", "0");
   var $val = $el.next();
   var dragging = false;
   var start = {x:0, y:0};
@@ -32,7 +32,7 @@ function Slider(el) {
   }
 
 
-  $thumb.mousedown(function(e){
+  $el.mousedown(function(e){
 
     dragging = true;
     $val = $el.parent().next();
@@ -55,15 +55,17 @@ function Slider(el) {
     pos = self.widget.find();
 
     var offset = $thumb.offset();
-    $rail = $("<div class='slider-thumb'></div>");
-    $("body").append($rail);
-    $rail.css({
-      "position": "fixed",
-      // "padding": "20px",
-      "z-index": 999,
-      "top": offset.top,
-      "left": offset.left,
-    });
+    // $rail = $("<div class='slider-thumb'></div>");
+    // $("body").append($rail);
+    // $rail.css({
+    //   "position": "fixed",
+    //   // "padding": "20px",
+    //   "z-index": 999,
+    //   "top": offset.top,
+    //   "left": offset.left,
+    // });
+
+    // $rail.css("background", "rgb(" + parseInt(Math.random()*255) + ",255,0)");
 
   });
 
@@ -73,7 +75,7 @@ function Slider(el) {
       delt.x = e.clientX - start.x;
       delt.y = e.clientY - start.y;
 
-      val = Math.round((strtval - parseInt(delt.y * 0.3) * step) * 100) / 100;
+      val = Math.round((strtval - parseInt(-delt.x * 0.3) * step) * 100) / 100;
 
 
       curr_tab.cm.replaceRange(
@@ -86,19 +88,19 @@ function Slider(el) {
       );
       curr_text = val + ext;
 
-      $rail.css({
-        "-webkit-transform": "translate3d(0, " + delt.y + "px, 0)",
-        // "height": delt.y
-      });
+      // $rail.css({
+      //   "-webkit-transform": "translate3d(0, " + delt.y + "px, 0)",
+      //   // "height": delt.y
+      // });
     }
   });
   $("html").mouseup(function(){
     dragging = false;
     $(".dragging").removeClass("dragging");
-    $rail.remove();
-    $rail.css({
-      "-webkit-transform": ""
-    });
+    // $rail.remove();
+    // $rail.css({
+    //   "-webkit-transform": ""
+    // });
   });
 
   $el.keydown(function(e){

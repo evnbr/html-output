@@ -121,7 +121,7 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
       return "tag";
     } else if (ch == "=") {
       type = "equals";
-      return null;
+      return "equals";
     } else if (ch == "<") {
       state.tokenize = inText;
       state.state = baseState;

@@ -80,7 +80,7 @@
     var marker = document.createElement("div")
       , inner  = marker;
 
-    marker.style.height = (linesFree * 1.4) + "em";
+    // marker.style.height = (linesFree * 1.4) + "em";
     marker.className = "CodeMirror-lint-marker-" + severity;
     marker.appendChild(labels); //"What's up!"; - EB
     if (multiple) {
@@ -149,7 +149,7 @@
         maxSeverity = getMaxSeverity(maxSeverity, severity);
 
         if (options.formatAnnotation) ann = options.formatAnnotation(ann);
-        if (state.hasGutter) tipLabel.appendChild(annotationTooltip(ann, i));
+        if (state.hasGutter && i < 1) tipLabel.appendChild(annotationTooltip(ann, i));
 
         if (ann.to) state.marked.push(cm.markText(ann.from, ann.to, {
           className: "CodeMirror-lint-mark-" + severity,
@@ -158,12 +158,12 @@
       }
 
       var linesFree = 1;
-      for (var j = 1; j < 6; j++) {
-        if (!annotations[line + j]){
-          linesFree++;
-        }
-        else break;
-      }
+      // for (var j = 1; j < 6; j++) {
+      //   if (!annotations[line + j]){
+      //     linesFree++;
+      //   }
+      //   else break;
+      // }
 
       if (state.hasGutter)
         cm.setGutterMarker(line, GUTTER_ID, makeMarker(anns, linesFree, tipLabel, maxSeverity, anns.length > 1,

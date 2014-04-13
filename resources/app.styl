@@ -3,6 +3,7 @@ $bg         = white
 $graytext   = #bbb
 $activetext = rgb(0, 163, 255)
 $redcolor   = #991616
+$darkbg     = #2D323A
 
 // -------------------
 // R E S E T
@@ -15,6 +16,7 @@ $redcolor   = #991616
   font: inherit
   text-rendering: optimizeLegibility
   -webkit-user-select: none
+  font-smoothing: anti-aliased
 
 // -------------------
 // G E N E R A L
@@ -24,12 +26,11 @@ body, html
   height: 100%
 
 body
-  margin: 0px
-  background: $bg
-  padding-top: 2em
-  color: $color
-  font: 400 12px/1.4 "Lucida Grande"
-
+  margin       0px
+  background   $bg
+  padding-top  2em
+  color        $color
+  font         400 12px/1.4 "Lucida Grande"
 
 //::-webkit-scrollbar-button       
 //::-webkit-scrollbar-track      
@@ -38,10 +39,24 @@ body
 //::-webkit-resizer               
 
 ::-webkit-scrollbar-thumb
-  background: rgba(0,0,0,0.05)
+  background: rgba(0,0,0,0.2)
 
 ::-webkit-scrollbar   
   width: 5px
+
+
+.dark-theme
+  background: $darkbg
+  .nav
+    background: $darkbg
+    border-color: rgba(white,0.08)
+    a
+      color gray
+    .activetab
+      color white
+
+  ::-webkit-scrollbar-thumb
+    background: rgba(255,255,255,0.2)
 
 
 a:link, a:visited
@@ -93,9 +108,6 @@ h2
   .activetab
     color    $activetext
 
-.dark-theme .nav
-  background: #222
-  border-color: rgba(white,0.15)
 
 .btn
   display: inline-block
@@ -126,7 +138,6 @@ h2
   display: none
   vertical-align: top
   // width: 700px
-  background: white
   // border-left: 1px solid rgba(0,0,0,0.1)
   &.active
     display: block
@@ -145,90 +156,40 @@ h2
   height: calc(100vh - 2.8em)
 
 
-.marginalia
-  width: 10px
-
-[class^="sel"]
-  font-weight: 400
-  font-style: italic
-
-
-.sel-id
-  color: #CCA258 // #61B3E5
-
-.sel-class
-  color: #CB886C
-
-.sel-name
-  color: #B18EB0
+// When there is a gutter element, the line (normally a pre) is
+// wrapped in an anonymous div together with its gutter.
+// ----------
+// We've moved the gutter element *after* the pre, so it can
+// be implicitly positioned right next to it instead
+// of floating mysteriously in the margin
+.CodeMirror .CodeMirror-code > div > pre
+  display: inline-block
+// ----------
+// We undo the absolute positioning mess
+// to allow the gutter elts to be in-line
+.CodeMirror-gutter-wrapper
+  display inline-block
+  &[style]
+    position static !important
+.CodeMirror-gutter-elt
+  position static !important
+  display inline-block
 
 
 .dragging
-  cursor: ns-resize
+  cursor: ew-resize
   *
     -webkit-user-select: none !important
+    cursor: ew-resize !important
 
 
-.slider
-  display: inline-block
-  height: 11px
-  width: 2ch
-  position: relative
-  opacity: 0.7
-  -webkit-transition: all 0.1s
-  cursor: ns-resize
-  -webkit-user-select: none
-  &:focus
-    opacity: 1
-    outline: none
-    .slider-rail
-      background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(blue,0)), color-stop(50%,rgba(blue,1)), color-stop(100%,rgba(blue,0))) //$color
-    .slider-thumb
-      border-color: blue
-    & + span
-      color: blue
-  &:hover
-    opacity: 1
-    .slider-thumb
-      background: lighten($redcolor, 55)
-      top: -2px
-      height: 18px
-    .slider-rail
-      height: 50px
-      top: -20px
-  &.dragging
-    opacity: 1
-    .slider-rail
-      height: 200px
-      top: -95px
-      -webkit-transition: none
 
-
-.slider-thumb
-  height: 9px
-  width: 9px
-  border: 1px solid $redcolor
-  border-radius: 2px
-  background: $bg
-  position: absolute
-  top: 3px
-  left: 3px
-  -webkit-transition: all 0.1s
-
-.slider-rail
-  height: 20px
-  width: 1px
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba($redcolor,0)), color-stop(50%,rgba($redcolor,1)), color-stop(100%,rgba($redcolor,0))) //$color
-  position: absolute
-  top: -3px
-  left: 7px
-  margin: auto
-  -webkit-transition: all 0.1s
 
 .colorpicker
   display: inline-block
   width: 2ch
   height: 12px
+  overflow: hidden
   background: transparent
   // -webkit-transition: all 0.2s
 

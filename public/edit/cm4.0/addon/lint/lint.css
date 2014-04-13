@@ -6,16 +6,20 @@
 
 .CodeMirror-gutter-elt:hover {
   z-index: 999;
-  background: white;
+  // background: white;
 }
 
 .CodeMirror-lint-marker-warning,
 .CodeMirror-lint-marker-error,
 .console-log-marker {
-  left: 600px;
-  min-width: 150px;
+  /*left: -300px;
+  width: 300px;*/
   position: relative;
   text-align: left;
+}
+
+.CodeMirror-gutter-wrapper[style] {
+  left: auto!important;
 }
 
 .console-log-marker {
@@ -92,8 +96,8 @@
   cursor: pointer;
   display: inline-block;
   height: 16px;
-  overflow: hidden;
-  //width: 16px;
+  // overflow: hidden;
+  // width: 16px;
   text-align: left;
   vertical-align: middle;
   position: relative;
@@ -109,7 +113,7 @@
   z-index: 999;
 }
 
-.CodeMirror-lint-message-error, .CodeMirror-lint-message-warning {
+/*.CodeMirror-lint-message-error, .CodeMirror-lint-message-warning {
   // padding-left: 18px;
   background-position: top left;
   background-repeat: no-repeat;
@@ -122,7 +126,7 @@
 
   padding-bottom: 0.5em;
   // -webkit-animation: enter 0.5s;
-}
+}*/
 
 .CM-current-lint {
   // -webkit-animation: enter 0.3s;

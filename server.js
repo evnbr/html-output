@@ -80,7 +80,7 @@ io.sockets.on('connection', function (socket) {
 
 
 function save(filename, text, id) {
-  fs.writeFile("public/sketch/" + filename, text, function(err) {
+  fs.writeFile(filename, text, function(err) {
       if (err) {
           console.log(err);
       }
@@ -94,7 +94,7 @@ function save(filename, text, id) {
 }
 
 function open(filename, id) {
-  fs.readFile('public/sketch/' + filename, 'utf8', function (err,data) {
+  fs.readFile(filename, 'utf8', function (err,data) {
     if (err) {
         console.log(err);
     }

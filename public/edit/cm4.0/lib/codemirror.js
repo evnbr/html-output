@@ -836,10 +836,15 @@
     var markers = lineView.line.gutterMarkers;
     if (cm.options.lineNumbers || markers) {
       var wrap = ensureLineWrapped(lineView);
+      // var gutterWrap = lineView.gutter =
+      //   wrap.insertBefore(elt("div", null, "CodeMirror-gutter-wrapper", "position: absolute; right: " +
+      //                         (cm.options.fixedGutter ? dims.fixedPos : -dims.gutterTotalWidth) + "px"),
+      //                     lineView.text);
+      // Instead insert gutter after
       var gutterWrap = lineView.gutter =
-        wrap.insertBefore(elt("div", null, "CodeMirror-gutter-wrapper", "position: absolute; left: " +
+        wrap.insertBefore(elt("div", null, "CodeMirror-gutter-wrapper", "position: absolute; right: " +
                               (cm.options.fixedGutter ? dims.fixedPos : -dims.gutterTotalWidth) + "px"),
-                          lineView.text);
+                          lineView.text.nextSibling);
       if (cm.options.lineNumbers && (!markers || !markers["CodeMirror-linenumbers"]))
         lineView.lineNumber = gutterWrap.appendChild(
           elt("div", lineNumberFor(cm.options, lineN),
