@@ -23,6 +23,14 @@ var file_arr = [
   "/Users/evan/Developer/htmloutput/public/sketch/style.scss",
 ];
 
+var file_arr = [
+  "style.styl",
+  "index.html",
+  "script.js",
+  "style.scss",
+];
+
+
 for (var i = 0; i < file_arr.length; i++) {
   open(file_arr[i]);
 }
