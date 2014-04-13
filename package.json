@@ -4,8 +4,11 @@
   "description": "Node.js instant messenger that doesn't work very well",
   "main": "server.js",
   "dependencies": {
-    "socket.io": "~0.9.16",
-    "express": "~4.0.0-rc2"
+    "express": "4.0.0-rc2",
+    "node-sass": "0.8.4",
+    "nodemon": "1.0.17",
+    "socket.io": "0.9.16",
+    "stylus": "0.43.1"
   },
   "devDependencies": {},
   "scripts": {
