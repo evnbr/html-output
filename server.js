@@ -48,7 +48,7 @@ io.sockets.on('connection', function (socket) {
         message.css = sass.renderSync({
           data: message.scss
         });
-        io.sockets.emit('message', message);
+        io.sockets.volatile.emit('message', message);
       } catch(err) {
         console.log(err);
       }
@@ -62,7 +62,7 @@ io.sockets.on('connection', function (socket) {
           .render(function(err, css){
             if (err) throw err;
             message.css = css;
-            io.sockets.emit('message', message);
+            io.sockets.volatile.emit('message', message);
           });     
       } catch(err) {
         console.log(err);
