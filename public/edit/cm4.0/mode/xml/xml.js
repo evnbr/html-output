@@ -57,6 +57,8 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
   };
   var alignCDATA = parserConfig.alignCDATA;
 
+
+  var is_head = false;
   // Return variables for tokenizers
   var tagName, type, setStyle;
 
@@ -91,8 +93,19 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
         while ((c = stream.eat(/[^\s\u00a0=<>\"\'\/?]/))) tagName += c;
         if (Kludges.caseFold) tagName = tagName.toLowerCase();
         if (!tagName) return "tag error";
+
         type = isClose ? "closeTag" : "openTag";
         state.tokenize = inTag;
+
+        // --------
+        // Highlight tags within the document head - EB
+        if (tagName == "head") {
+          is_head = !is_head;
+          if (!is_head) return "tag head";
+        }
+        if (is_head) return "tag head";
+        // ----------
+
         return "tag";
       }
     } else if (ch == "&") {
@@ -118,10 +131,18 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
     if (ch == ">" || (ch == "/" && stream.eat(">"))) {
       state.tokenize = inText;
       type = ch == ">" ? "endTag" : "selfcloseTag";
-      return "tag";
+
+      return is_head ? "tag head" : "tag";
+
     } else if (ch == "=") {
       type = "equals";
+
+      // -----------
+      // If in HTML head -EB
+      if (is_head) return "equals head";
+      // -----------
       return "equals";
+
     } else if (ch == "<") {
       state.tokenize = inText;
       state.state = baseState;
@@ -252,7 +273,13 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
   function attrState(type, _stream, state) {
     if (type == "word") {
       last_attr_key = _stream.current();
+
       setStyle = "attribute attrkey-" + last_attr_key; // eeeee -EB
+      
+      // -----------
+      // If in HTML head -EB
+      if (is_head) setStyle += " head";
+      // -----------
 
       return attrEqState;
     } else if (type == "endTag" || type == "selfcloseTag") {
