@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Color</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+
+    <link href="../colorpicker.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+
+  <pre>
+  l.style.background = gridGradient(h);
+  }
+}
+
+function Picker(el) {
+
+  var hue = 30;
+  var diff = 30;
+
+  var valGrid = new Grid(el.querySelector(".c-grid"));
+  var spectrumWheel = new Wheel(el.querySelector(".c-spectrum"));
+  var detailWheel = new DetailWheel(el.querySelector(".c-precise"), diff);
+
+  valGrid.setHue(hue);
+  spectrumWheel.setHue(hue);
+  detailWheel.setHue(hue);
+
+  spectrumWheel.setListener(function(hue){
+    hue = hue;
+    valGrid.setHue(hue);
+    detailWheel.setHue(hue);
+  });
+
+  detailWheel.setListener(function(delta){
+    hue += delta * diff;
+    valGrid.setHue(hue);
+    spectrumWheel.setHue(hue);
+  });
+}
+
+  </pre>
+
+    <div class="c-picker">
+      <div class="c-preview">
+      </div>
+      <div class="c-bg">
+        <div class="c-hue">
+          <div class="c-wheel c-spectrum">
+          </div
+          ><div class="c-wheel c-precise">
+          </div>
+        </div
+        ><div class="c-value">
+          <div class="c-grid">
+            <div class="c-thumb">
+            </div>
+          </div>
+        </div>
+      </div
+      ><div class="c-opacity">
+        <div class="c-slider c-alpha">
+        </div>
+      </div>
+      <div class="c-format">
+        <div>rgb(0,0,0,0)</div>
+        <div>hsl(50,50%,10%)</div>
+        <div>#12ff1a</div>
+        <div>charteuse<br><br></div>
+        <div>$redcolor</div>
+        <div>$greencolor</div>
+        <div>$bluecolor</div>
+      </div>
+    </div>
+
+
+    <script type="text/javascript" src="color.js"></script>
+  </body>
+</html>

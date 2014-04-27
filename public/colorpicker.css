@@ -1,0 +1,162 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-user-select: none;
+}
+body {
+  background: #fff;
+}
+.c-picker {
+  position: fixed;
+  top: 50px;
+  left: 50px;
+  line-height: 0;
+  border-radius: 2px;
+  box-shadow: 0 1px 1px 1px rgba(0,0,0,0.1), 0 8px 30px rgba(0,0,0,0.05);
+  background: #fff;
+  padding: 10px;
+}
+.c-preview {
+  height: 50px;
+  margin-bottom: 10px;
+  position: relative;
+}
+.c-preview:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-size: 22px 22px;
+  background-position: 0 0, 11px 11px;
+  background-image: linear-gradient(45deg, rgba(120,120,120,0.3) 25%, transparent 25%, transparent 75%, rgba(120,120,120,0.3) 75%, rgba(100,100,100,0.2)), linear-gradient(45deg, rgba(120,120,120,0.3) 25%, transparent 25%, transparent 75%, rgba(120,120,120,0.3) 75%, rgba(100,100,100,0.2));
+}
+.c-bg {
+  display: inline-block;
+}
+.c-format {
+  background: #fff;
+  display: inline-block;
+  height: 220px;
+  vertical-align: middle;
+  padding: 1em;
+  font-family: Consolas;
+  font-size: 12px;
+  color: #aaa;
+  display: none;
+}
+.c-format div {
+  line-height: normal;
+}
+.c-hue,
+.c-value,
+.c-opacity {
+  padding: 0;
+  margin-right: 10px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.c-opacity {
+  margin: 0;
+}
+.c-alpha {
+  width: 4px !important;
+  height: 200px !important;
+  border-radius: 2px;
+  box-shadow: inset 0 0 1px rgba(0,0,0,0.2);
+}
+.c-slider,
+.c-wheel {
+  height: 220px;
+  width: 20px;
+  display: inline-block;
+  background: #00f;
+  position: relative;
+}
+.c-wheel {
+  cursor: ns-resize;
+}
+.c-precise {
+  width: 2px;
+}
+.c-wheel:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  margin-top: -2px;
+  border-bottom: 1px solid #fff;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.2);
+  width: 100%;
+  z-index: 999;
+}
+.c-precise:after {
+  right: 0;
+}
+.c-spectrum {
+  border-right: 1px solid #fff;
+  width: 40px;
+}
+.c-spectrum .c-thumb {
+  z-index: 999;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+.c-spectrum:after {
+  left: 0;
+}
+.c-grid {
+  height: 220px;
+  width: 220px;
+  display: inline-block;
+  background: #008000;
+  position: relative;
+}
+.c-wheel {
+  overflow: hidden;
+}
+.c-looper:before,
+.c-looper:after {
+  content: "";
+  height: 100%;
+  width: 100%;
+  background: inherit;
+  display: block;
+  position: absolute;
+}
+.c-looper:before {
+  top: 100%;
+}
+.c-looper:after {
+  bottom: 100%;
+}
+.c-thumb {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  cursor: pointer;
+  background: #fff;
+}
+.c-grid .c-thumb {
+  margin: -13px;
+  box-shadow: 0 1px 1px 1px rgba(0,0,0,0.1);
+}
+.c-alpha .c-thumb {
+  margin-top: -13px;
+  margin-left: -10px;
+}
+.c-opacity {
+  margin: 0 10px;
+  background-size: 22px 22px;
+  background-position: 0 0, 11px 11px;
+  background-image: linear-gradient(45deg, rgba(120,120,120,0.3) 25%, transparent 25%, transparent 75%, rgba(120,120,120,0.3) 75%, rgba(100,100,100,0.2)), linear-gradient(45deg, rgba(120,120,120,0.3) 25%, transparent 25%, transparent 75%, rgba(120,120,120,0.3) 75%, rgba(100,100,100,0.2));
+}
+.c-thumb:hover {
+  background: #eee;
+}
