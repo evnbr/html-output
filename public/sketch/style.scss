@@ -1,4 +1,4 @@
-$num: 50px;
+$num: 19px;
 $col: rgb(162,13,59); 
 
 * {
@@ -12,7 +12,7 @@ $col: rgb(162,13,59);
 }
 
 html {
-  font: 39px / 1.1 "Arial", sans-serif; 
+  font: 46px / 1.1 "Helvetica", sans-serif;    
 }
  
 body { 
@@ -39,7 +39,7 @@ body {
 h1 {
   font-weight: bold;
   display: inline-block;
-  font-size: $num * 2; 
+  font-size: inherit; 
   padding-bottom: 0.5em;
   color: darken($col, 20);
   border-bottom: $num / 3 solid black
@@ -50,7 +50,7 @@ a:link, a:visited {
 }
 
 .better {
-  display: none;
+  // display: none;
 }
 
 .initial {
@@ -69,6 +69,6 @@ p {
 
 @media (max-width: 500px) {
   body {
-    font-size: 24px;
+    // font-size: 24px;
   }
 }

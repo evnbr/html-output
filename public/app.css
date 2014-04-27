@@ -20,12 +20,14 @@ body {
   padding-top: 2em;
   color: #000;
   font: 400 12px/1.4 "Lucida Grande";
+  -webkit-transition: all 0.2s;
 }
 ::-webkit-scrollbar-thumb {
   background: rgba(0,0,0,0.2);
 }
 ::-webkit-scrollbar {
   width: 5px;
+  height: 5px;
 }
 .dark-theme {
   background: #2d323a;
@@ -152,11 +154,12 @@ h2 {
   display: inline-block;
 }
 .dragging {
-  cursor: ew-resize;
+  cursor: ns-resize;
+  opacity: 0.3;
 }
 .dragging * {
   -webkit-user-select: none !important;
-  cursor: ew-resize !important;
+  cursor: ns-resize !important;
 }
 .colorpicker {
   display: inline-block;
@@ -177,6 +180,12 @@ h2 {
 .colorpicker-swatch:hover {
   box-shadow: 0 0 0 1px #f0f;
   z-index: 999;
+}
+.imgwidget {
+  display: inline-block;
+  width: 2ch;
+  height: 12px;
+  background: #00a3ff;
 }
 @media (min-width: 1500px) {
   body {

@@ -24,6 +24,7 @@
 
 .console-log-marker {
   color: #bbb;
+  font-size: 15px;
   -webkit-animation: decay 0.2s;
 }
 

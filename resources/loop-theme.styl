@@ -23,23 +23,25 @@ $bg         = white
 
 
 // ------------------------
+
 // B O T H  C O L O R S
+
 // ------------------------
 
 
 .cm-s-loop-light, .cm-s-loop-dark
   &.CodeMirror 
-    font   400 14px/1.4 "Consolas", "Source Code Pro", "Ubuntu Mono"
+    font   400 14px/1.5 "Consolas", "Source Code Pro", "Ubuntu Mono"
 
   .cm-keyword,
   .cm-kw-special
-    font-weight 600
+    // font-weight 600
 
   .cm-kw-special
     font-style italic
 
   .cm-comment 
-    // font-style italic
+    font-style italic
 
   // variables (these will be recolored)
   .cm-def,
@@ -73,24 +75,28 @@ $bg         = white
 
 
 // ------------------------
+
 // D A R K
+
 // ------------------------
+
+
 
 .cm-mode-html
   .cm-s-loop-light
     .cm-string
-      color: #764FA7
+      color: #355BAD // #764FA7
     .cm-attrval-class
-      color: $redcolor
+      color: #A652DF// $redcolor
     .cm-attrval-id
-      color #FF7A00
+      color #D64478 // #FF7A00
   .cm-s-loop-dark
     .cm-string
       color: #C08E58
     .cm-attrval-class
-      color #88B171 
+      color #CEBB56 // #88B171 
     .cm-attrval-id
-      color #CAB85A
+      color #88b171 // #CAB85A
 
 .cm-s-loop-dark
   $maincolordark   = #bbb
@@ -99,6 +105,14 @@ $bg         = white
   &.CodeMirror 
     color  $maincolordark
     // background #333
+
+  div.CodeMirror-cursor 
+    border-left: 1px solid #ddd !important
+
+  &.CodeMirror-focused .CodeMirror-selected
+    background: rgba(255,255,255,0.1)
+  .CodeMirror-selected
+    background: rgba(255,255,255,0.05)
 
   .cm-property
     color  $maincolordark !important
@@ -113,7 +127,9 @@ $bg         = white
   .cm-string
     // color #C97B62
     // orange
-    color $greencolor
+    //color $greencolor
+    color white
+    font-weight 300
 
   .cm-comment 
     color $commentdark
@@ -148,14 +164,19 @@ $bg         = white
 
 
 // ------------------------
+
 // L I G H T S
+
 // ------------------------
 
 .cm-s-loop-light
   
   $maincolor   = #444
-  $secondcolor = #DB8484
-  $comment     = #A4C7B3
+  // gray
+  $secondcolor = #8EB5CF
+  $comment     = #aaa
+  //#8db8aa
+  // #A4C7B3
 
   // Main
   &.CodeMirror 
@@ -174,33 +195,35 @@ $bg         = white
   .cm-atom,
   .cm-number, 
   .cm-string
-    color $redcolor
+    color black // $redcolor
+    font-weight 500
 
   // function and var definitions
   .cm-keyword,
   .cm-kw-special
-    color       #333
+    //color       #333
 
   .cm-tag,
   .cm-attribute,
   .cm-equals
-    color $secondcolor
+    color #54A6FF // #659DDA
     &.cm-head
-      color #C5AFAF
+      // color #A4B8C5
+      color #888
 
   .cm-comment 
-    color #bbb
+    color $comment
 
   .CodeMirror-lint-message-error,
   .CodeMirror-lint-message-warning
-    color #bbb
+    color $comment
 
   .console-log-marker
     color $activetext
     -webkit-animation  decaylight 0.2s;
 
   .CodeMirror-lines pre:hover
-    background: rgba(yellow, 0.1)
+    // background: rgba(yellow, 0.1)
 
   // .CodeMirror-lines pre:nth-child(even)
   //   background: rgba(0,0,0,0.02);
@@ -229,9 +252,9 @@ $bg         = white
 .slider
   display: inline-block
   height: 12px
-  width: 6ch
+  width: 2ch
   position: relative
-  cursor: ew-resize
+  cursor: ns-resize
   -webkit-user-select: none
   opacity 0.8
   &:focus
@@ -246,12 +269,10 @@ $bg         = white
   &:hover
     opacity: 1
     .slider-thumb
-      background: lighten($redcolor, 55)
+      // background: lighten($redcolor, 55)
+      // background $activetext
       //top: -2px
       //height: 18px
-    .slider-rail
-      height: 50px
-      top: -20px
   &.dragging
     opacity: 1
     .slider-rail
@@ -263,9 +284,10 @@ $bg         = white
 .slider-thumb
   height: 9px
   width: 9px
-  border: 1px solid $redcolor
+  border: 1px solid #ccc //$redcolor
   border-radius: 2px
-  background: $bg
+  background: #ddd // $bg
+  display: inline-block
   position: absolute
   top: 0
   left: 0
@@ -273,27 +295,19 @@ $bg         = white
   bottom: 0
   margin: auto
   margin-top 3px
-  -webkit-transition: all 0.1s
+  // -webkit-transition: all 0.1s
   &:before
     content: ""
     display  block
-    width    5.5ch
+    width    0
+    height 15px
     z-index  -1
-    top 3px
+    top -4px
     position relative
-    left -19px
-    border-bottom: 1px solid $redcolor
+    left 3px
+    border-right: 1px solid #aaa // $redcolor
     opacity: 0.5
 
-.slider-rail
-  height: 20px
-  width: 1px
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba($redcolor,0)), color-stop(50%,rgba($redcolor,1)), color-stop(100%,rgba($redcolor,0))) //$color
-  position: absolute
-  top: -3px
-  left: 7px
-  margin: auto
-  -webkit-transition: all 0.1s
 
 
 .cm-s-loop-dark
@@ -302,20 +316,33 @@ $bg         = white
 
   .slider
     .slider-thumb
-      border-color $greencolor
+      border-color gray // $greencolor
       &:before
-        border-color $greencolor
+        border-color gray // $greencolor
     &:hover
       opacity: 1
       .slider-thumb
         background: darken($greencolor, 25)
 
 
+.CodeMirror-widget
+  cursor: ns-resize
 
+.CodeMirror-widget:hover,
+.CodeMirror-widget:hover + .cm-number
+  // background: rgba($activetext, 0.1)
+  color $activetext
+  // border-bottom: 1px dotted black
 
-
-
-
+.CodeMirror-widget:hover
+  .slider-thumb
+    background $activetext
+    border-color $activetext
+    &:before
+      border-color $activetext
+      height: 50px
+      top: -20px
+    // border: 1px solid black
 
 
 

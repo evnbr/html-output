@@ -6,7 +6,11 @@ $redcolor   = #991616
 $darkbg     = #2D323A
 
 // -------------------
+
 // R E S E T
+
+// -------------------
+
 * 
   margin: 0
   padding: 0
@@ -19,7 +23,10 @@ $darkbg     = #2D323A
   font-smoothing: anti-aliased
 
 // -------------------
+
 // G E N E R A L
+
+// -------------------
 
 body, html
   overflow: hidden
@@ -31,6 +38,7 @@ body
   padding-top  2em
   color        $color
   font         400 12px/1.4 "Lucida Grande"
+  -webkit-transition all 0.2s
 
 //::-webkit-scrollbar-button       
 //::-webkit-scrollbar-track      
@@ -43,7 +51,7 @@ body
 
 ::-webkit-scrollbar   
   width: 5px
-
+  height: 5px
 
 .dark-theme
   background: $darkbg
@@ -177,10 +185,11 @@ h2
 
 
 .dragging
-  cursor: ew-resize
+  cursor: ns-resize
+  opacity 0.3
   *
     -webkit-user-select: none !important
-    cursor: ew-resize !important
+    cursor: ns-resize !important
 
 
 
@@ -206,7 +215,11 @@ h2
     box-shadow: 0 0 0 1px magenta
     z-index: 999
 
-
+.imgwidget
+  display: inline-block
+  width: 2ch
+  height: 12px
+  background $activetext
 
 @media (min-width: 1500px)
   body 
