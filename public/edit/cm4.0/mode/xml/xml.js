@@ -58,7 +58,8 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
   var alignCDATA = parserConfig.alignCDATA;
 
 
-  var is_head = false;
+  var is_head = true; // start state. reversed because !?! - EB
+
   // Return variables for tokenizers
   var tagName, type, setStyle;
 
@@ -100,10 +101,17 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
         // --------
         // Highlight tags within the document head - EB
         if (tagName == "head") {
-          is_head = !is_head;
-          if (!is_head) return "tag head";
+          if (isClose) {
+            state.inHead = false;
+            return "tag head";
+            // return early because closing tag should still
+            // be highlighted
+          }
+          else {
+            state.inHead = true;
+          }
         }
-        if (is_head) return "tag head";
+        if (state.inHead) return "tag head";
         // ----------
 
         return "tag";
@@ -132,14 +140,14 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
       state.tokenize = inText;
       type = ch == ">" ? "endTag" : "selfcloseTag";
 
-      return is_head ? "tag head" : "tag";
+      return state.inHead ? "tag head" : "tag";
 
     } else if (ch == "=") {
       type = "equals";
 
       // -----------
       // If in HTML head -EB
-      if (is_head) return "equals head";
+      if (state.inHead) return "equals head";
       // -----------
       return "equals";
 
@@ -207,6 +215,7 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
   }
 
   function Context(state, tagName, startOfLine) {
+    this.inHead = state.inHead;
     this.prev = state.context;
     this.tagName = tagName;
     this.indent = state.indented;
@@ -278,7 +287,7 @@ CodeMirror.defineMode("xml", function(config, parserConfig) {
       
       // -----------
       // If in HTML head -EB
-      if (is_head) setStyle += " head";
+      if (state.inHead) setStyle += " head";
       // -----------
 
       return attrEqState;
