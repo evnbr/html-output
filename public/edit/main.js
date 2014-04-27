@@ -23,12 +23,12 @@ var file_arr = [
   "/Users/evan/Developer/htmloutput/public/sketch/style.scss",
 ];
 
-var file_arr = [
-  "style.styl",
-  "index.html",
-  "script.js",
-  "style.scss",
-];
+// var file_arr = [
+//   "style.styl",
+//   "index.html",
+//   "script.js",
+//   "style.scss",
+// ];
 
 
 for (var i = 0; i < file_arr.length; i++) {
@@ -64,9 +64,9 @@ function make_tab(filename, content) {
   {
     mode: mode,
     tabSize: 2,
-    styleActiveLine: true,
+    //styleActiveLine: true,
     lineNumbers: false,
-    lineWrapping: false,
+    lineWrapping: true,
     gutters: ["CodeMirror-lint-markers"],
     lint: (mode == "javascript"),
     keyMap: "sublime",
@@ -91,7 +91,7 @@ function make_tab(filename, content) {
   var hinter = "";
 
   if (ext == "js") hinter = "javascript";
-  else if (ext == "html") hinter = "html";
+  // else if (ext == "html") hinter = "html";
   else if (ext == "css" || ext=="scss") hinter = "css";
 
   editor.on("inputRead", function(cm) {
@@ -100,7 +100,7 @@ function make_tab(filename, content) {
       var cursor = cm.getCursor();
       var ltr = cm.getRange({line: cursor.line, ch: cursor.ch - 1}, cursor);
 
-      if (/^[A-Za-z]/.test(ltr)) {
+      if (hinter && /^[A-Za-z]/.test(ltr)) {
         timeout = setTimeout(function() {
             CodeMirror.showHint(cm, CodeMirror.hint[hinter], {completeSingle: false});
         }, 150);
@@ -127,6 +127,10 @@ function make_tab(filename, content) {
   // });
 
   editor.setValue(content);
+  setTimeout(function(){
+    widgetize(editor, 0, editor.lineCount()-1);
+  }, 100);
+
 
   // var left = index * 700;
   // tab_panel.style.webkitTransform = "translate3d(" + left + "px,0,0)";
@@ -207,8 +211,9 @@ function widgetize(cm, start, end) {
       pos = {line: line_num, ch: ch}
       token = cm.getTokenAt(pos);
       type = token.type;
-      if      (type && type.contains("number")) curr = "number";
-      else if (type && type.contains("color"))  curr = "color";
+      if      (type && type.contains("number"))       curr = "number";
+      else if (type && type.contains("color"))        curr = "color";
+      else if (type && type.contains("attrval-src"))  curr = "src";
       else    curr = false;
 
       if (curr && (curr !== prev)) {
@@ -220,6 +225,10 @@ function widgetize(cm, start, end) {
         else if (curr == "color") {
           var w = get_colorpicker();
         }
+        else if (curr == "src") {
+          var w = get_img();
+        }
+        // console.log(w);
         var widg = cm.setBookmark(
           insert_pos,
           {
@@ -227,7 +236,7 @@ function widgetize(cm, start, end) {
             insertLeft: true
           }
         );
-        w.obj.setWidget(widg);
+        if (w.obj.setWidget) w.obj.setWidget(widg);
       }
       prev = curr;
     }
@@ -247,7 +256,7 @@ function widgetize(cm, start, end) {
 socket.on('message', function(msg) {
   if (msg.ID !== socket_id) {
     if (msg.from_disk) {
-      console.log(msg);
+      // console.log(msg);
       make_tab(msg.file_name, msg.content);
     }
     else if (msg.confirm_save) {
@@ -395,7 +404,6 @@ for (var i = 0; i < actions.length; i++ ) {
 
 function toggle_theme() {
   $("body").toggleClass("dark-theme");
-  console.log("hey");
 
   var newtheme = "loop-light";
   if ($("body").hasClass("dark-theme")) {
