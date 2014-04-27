@@ -3,27 +3,24 @@ var mouse = {x: 0, y:0};
 
 // ----------------------------------
 
-// Hello! this is the section
-// --------------------------
-// where I *explain* what is going on!
-// pretty cool, huh.
-// 
-// Well, I think it is.
-
-function draaw() {
+function draaw() { 
+  
+  var message = "hello";
+  
   
   counter++;
-  background(176, 187, 176);    
   
+  background(143, 187, 176);    
+
   for (var i = 0; i < 6; i++) {  
     var add = Math.sin(counter / 18.2) * i * 6;      
     rect( 64 + i * 7, 164 +  i * 21,  105 + add, 87 );          
   }
-  // console.log(Math.random());
+  // console.log(Math.random());   
 } 
 
 document.addEventListener("mousemove", function(e) {
-  console.log(e.clientX); 
+  console.log(e.clientX);  
   // mouse.x = e.clientX;
   // mouse.y = e.clientY;
 });
