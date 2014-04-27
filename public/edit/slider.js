@@ -75,7 +75,7 @@ function Slider(el) {
       delt.x = e.clientX - start.x;
       delt.y = e.clientY - start.y;
 
-      val = Math.round((strtval - parseInt(-delt.x * 0.3) * step) * 100) / 100;
+      val = Math.round((strtval - parseInt(delt.y * 0.3) * step) * 100) / 100;
 
 
       curr_tab.cm.replaceRange(
@@ -186,3 +186,10 @@ function get_colorpicker() {
   var picker = new Picker(el);
   return {obj: picker, el: el};
 }
+
+function get_img() {
+  var el = document.createElement('span');
+  el.className = 'imgwidget';
+  return {obj: {}, el: el};
+}
+
