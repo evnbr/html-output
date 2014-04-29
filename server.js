@@ -22,6 +22,7 @@ app.use(stylus.middleware({
   force: true
 }));
 app.use(express.static(__dirname + '/public'));
+// app.use(express.static('/Users/evan/Developer'));
 // app.use(express.errorHandler());
 
 var server = socketServer.listen(process.env.PORT || 3000, function() {

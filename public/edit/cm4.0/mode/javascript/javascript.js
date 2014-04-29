@@ -90,6 +90,8 @@ CodeMirror.defineMode("javascript", function(config, parserConfig) {
     return style;
   }
   function tokenBase(stream, state) {
+
+
     var ch = stream.next();
     if (ch == '"' || ch == "'") {
       state.tokenize = tokenString(ch);
@@ -626,17 +628,25 @@ CodeMirror.defineMode("javascript", function(config, parserConfig) {
     },
 
     token: function(stream, state) {
+
+      var ind = ""; // add indentedness line class
+
       if (stream.sol()) {
+
         if (!state.lexical.hasOwnProperty("align"))
           state.lexical.align = false;
         state.indented = stream.indentation();
         findFatArrow(stream, state);
+
+        ind = "line-ind-" + state.indented + " ";
       }
-      if (state.tokenize != tokenComment && stream.eatSpace()) return null;
+
+
+      if (state.tokenize != tokenComment && stream.eatSpace()) return ind;
       var style = state.tokenize(stream, state);
-      if (type == "comment") return style;
+      if (type == "comment") return ind + style;
       state.lastType = type == "operator" && (content == "++" || content == "--") ? "incdec" : type;
-      return parseJS(state, style, type, content, stream);
+      return ind + parseJS(state, style, type, content, stream);
     },
 
     indent: function(state, textAfter) {
@@ -664,6 +674,11 @@ CodeMirror.defineMode("javascript", function(config, parserConfig) {
       else if (lexical.align) return lexical.column + (closing ? 0 : 1);
       else return lexical.indented + (closing ? 0 : indentUnit);
     },
+
+    blankLine: function(state) {
+      return "line-ind-" + state.indented;
+    },
+
 
     electricChars: ":{}",
     blockCommentStart: jsonMode ? null : "/*",

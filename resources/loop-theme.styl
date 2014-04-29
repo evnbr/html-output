@@ -31,17 +31,17 @@ $bg         = white
 
 .cm-s-loop-light, .cm-s-loop-dark
   &.CodeMirror 
-    font   400 14px/1.5 "Consolas", "Source Code Pro", "Ubuntu Mono"
+    font   500 14px/1.5 "Source Code Pro", "Ubuntu Mono"
 
   .cm-keyword,
   .cm-kw-special
     // font-weight 600
 
   .cm-kw-special
-    font-style italic
+    // font-style italic
 
   .cm-comment 
-    font-style italic
+    // font-style italic
 
   // variables (these will be recolored)
   .cm-def,
@@ -129,7 +129,7 @@ $bg         = white
     // orange
     //color $greencolor
     color white
-    font-weight 300
+    font-weight 500
 
   .cm-comment 
     color $commentdark
@@ -138,12 +138,14 @@ $bg         = white
   .cm-kw-special
     // color rgb(214, 214, 214)
 
-  .cm-tag,
-  .cm-attribute,
-  .cm-equals
+  .cm-tag
     color #BE6464
     &.cm-head
-      color #8B6B6B
+      color #977575
+
+  .cm-attribute,
+  .cm-equals
+    color #977575
 
   .CodeMirror-lint-message-error,
   .CodeMirror-lint-message-warning,
@@ -203,13 +205,16 @@ $bg         = white
   .cm-kw-special
     //color       #333
 
-  .cm-tag,
-  .cm-attribute,
-  .cm-equals
+  .cm-tag
     color #54A6FF // #659DDA
     &.cm-head
       // color #A4B8C5
       color #888
+
+  .cm-attribute,
+  .cm-equals
+    color gray
+
 
   .cm-comment 
     color $comment
@@ -247,7 +252,38 @@ $bg         = white
 
 
 
-// =======================
+// ------------------------
+
+// I N D E N T   G U I D E S
+
+// ------------------------
+
+
+
+.CodeMirror
+  pre.ind-0, pre.ind-1
+    background transparent
+
+  pre.ind-2, pre.ind-3
+    background url(indents/ind1.png) repeat-y
+    background-position top left 4px
+
+  pre.ind-4, pre.ind-5
+    background-image url(indents/ind1.png), url(indents/ind1.png)
+    background-position top left 4px, top left 18px
+    background-repeat repeat-y
+
+  pre.ind-6, pre.ind-7
+    background-image url(indents/ind1.png), url(indents/ind1.png), url(indents/ind1.png)
+    background-position top left 4px, top left 18px, top left 30px
+    background-repeat repeat-y
+
+
+// ------------------------
+
+// S L I D E R
+
+// ------------------------
 
 .slider
   display: inline-block

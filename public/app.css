@@ -7,7 +7,7 @@
   font: inherit;
   text-rendering: optimizeLegibility;
   -webkit-user-select: none;
-  font-smoothing: anti-aliased;
+  -webkit-font-smoothing: antialiased;
 }
 body,
 html {
@@ -20,14 +20,7 @@ body {
   padding-top: 2em;
   color: #000;
   font: 400 12px/1.4 "Lucida Grande";
-  -webkit-transition: all 0.2s;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(0,0,0,0.2);
-}
-::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  -webkit-transition: opacity 0.2s;
 }
 .dark-theme {
   background: #2d323a;
@@ -72,13 +65,6 @@ h1 {
 h2 {
   font-size: 2rem;
 }
-[data-selector] {
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-}
-[data-selector]:hover {
-  border-bottom: 1px solid #fff;
-  color: #fff;
-}
 .nav {
   position: fixed;
   z-index: 10;
@@ -86,17 +72,20 @@ h2 {
   left: 0;
   right: 0;
   border: 0;
-  background: #fff;
   border-bottom: 1px solid #eee;
 }
 .nav a {
   display: inline-block;
-  padding: 0.8em 1.5em;
+  padding: 0.4em 1em;
   text-decoration: none;
+  color: #bbb;
+  font-family: Nitti Grotesk;
+  font-size: 16px;
+  font-weight: 200;
   color: #bbb;
 }
 .nav .activetab {
-  color: #00a3ff;
+  color: #000;
 }
 .btn {
   display: inline-block;
@@ -187,24 +176,26 @@ h2 {
   height: 12px;
   background: #00a3ff;
 }
-@media (min-width: 1500px) {
+@media (min-width: 700px) {
   body {
     padding-top: 1em;
   }
   .nav {
-    width: 200px;
+    width: 150px;
     bottom: 0;
     right: auto;
     border: 0;
-    border-right: 1px solid #ddd;
+    background: #fff;
   }
   .nav a {
     display: block;
   }
   .tabs {
-    padding-left: 200px;
+    top: 0;
+    left: 150px;
   }
   .CodeMirror {
-    padding-top: 1em;
+    top: 0;
+    height: 100vh;
   }
 }

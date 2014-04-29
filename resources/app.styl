@@ -20,7 +20,7 @@ $darkbg     = #2D323A
   font: inherit
   text-rendering: optimizeLegibility
   -webkit-user-select: none
-  font-smoothing: anti-aliased
+  -webkit-font-smoothing: antialiased
 
 // -------------------
 
@@ -38,7 +38,7 @@ body
   padding-top  2em
   color        $color
   font         400 12px/1.4 "Lucida Grande"
-  -webkit-transition all 0.2s
+  -webkit-transition opacity 0.2s
 
 //::-webkit-scrollbar-button       
 //::-webkit-scrollbar-track      
@@ -46,12 +46,12 @@ body
 //::-webkit-scrollbar-corner       
 //::-webkit-resizer               
 
-::-webkit-scrollbar-thumb
-  background: rgba(0,0,0,0.2)
+// ::-webkit-scrollbar-thumb
+//   background: rgba(0,0,0,0.2)
 
-::-webkit-scrollbar   
-  width: 5px
-  height: 5px
+// ::-webkit-scrollbar   
+//   width: 5px
+//   height: 5px
 
 .dark-theme
   background: $darkbg
@@ -92,29 +92,28 @@ h1
 h2
   font-size: 2rem
 
-[data-selector]
-  // cursor: pointer
-  border-bottom: 1px solid rgba(white, 0.1)
-  &:hover
-    border-bottom: 1px solid white
-    color: white
 
 .nav
   position: fixed
   z-index: 10
-  top: 0
-  left: 0
-  right: 0
-  border: 0
-  background: white
+  top     0
+  left    0
+  right   0
+  border  0
+  // background: #f4f4f4
   border-bottom: 1px solid #eee
   a
     display: inline-block
-    padding: 0.8em 1.5em
-    text-decoration none
+    padding: 0.4em 1em
+    text-decoration: none
+    color: #bbb
+    font-family: Nitti Grotesk
+    font-size: 16px
+    font-weight: 200
     color    $graytext
   .activetab
-    color    $activetext
+    color    black
+    // background white
 
 
 .btn
@@ -203,39 +202,42 @@ h2
   // -webkit-transition: all 0.2s
 
 .colorpicker-swatch
-  cursor: pointer
-  width: 14px
-  height: 14px
+  cursor   pointer
+  width    14px
+  height   14px
   border-radius: 1px
   box-shadow: 0 0 0 1px rgba(0,0,0,0.1)
-  position: absolute
-  top: 0
+  position absolute
+  top      0
   &:hover
     // -webkit-transform: scale(1.5)
-    box-shadow: 0 0 0 1px magenta
-    z-index: 999
+    box-shadow 0 0 0 1px magenta
+    z-index    999
 
 .imgwidget
-  display: inline-block
-  width: 2ch
-  height: 12px
+  display    inline-block
+  width      2ch
+  height     12px
   background $activetext
 
-@media (min-width: 1500px)
+@media (min-width: 700px)
   body 
     padding-top: 1em
 
   .nav
-    width: 200px
-    bottom: 0
-    right: auto
-    border: 0
-    border-right: 1px solid #ddd
+    width      150px
+    bottom     0
+    right      auto
+    border     0
+    background white
+    // border-right: 1px solid #ddd
     a
       display: block
 
   .tabs
-    padding-left: 200px
+    top  0
+    left 150px
 
   .CodeMirror
-    padding-top: 1em
+    top: 0
+    height: 100vh

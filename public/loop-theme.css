@@ -6,15 +6,7 @@
 }
 .cm-s-loop-light.CodeMirror,
 .cm-s-loop-dark.CodeMirror {
-  font: 400 14px/1.5 "Consolas", "Source Code Pro", "Ubuntu Mono";
-}
-.cm-s-loop-light .cm-kw-special,
-.cm-s-loop-dark .cm-kw-special {
-  font-style: italic;
-}
-.cm-s-loop-light .cm-comment,
-.cm-s-loop-dark .cm-comment {
-  font-style: italic;
+  font: 500 14px/1.5 "Source Code Pro", "Ubuntu Mono";
 }
 .cm-s-loop-light .cm-def,
 .cm-s-loop-dark .cm-def,
@@ -104,20 +96,20 @@
 .cm-s-loop-dark .cm-number,
 .cm-s-loop-dark .cm-string {
   color: #fff;
-  font-weight: 300;
+  font-weight: 500;
 }
 .cm-s-loop-dark .cm-comment {
   color: #576a72;
 }
-.cm-s-loop-dark .cm-tag,
-.cm-s-loop-dark .cm-attribute,
-.cm-s-loop-dark .cm-equals {
+.cm-s-loop-dark .cm-tag {
   color: #be6464;
 }
-.cm-s-loop-dark .cm-tag.cm-head,
-.cm-s-loop-dark .cm-attribute.cm-head,
-.cm-s-loop-dark .cm-equals.cm-head {
-  color: #8b6b6b;
+.cm-s-loop-dark .cm-tag.cm-head {
+  color: #977575;
+}
+.cm-s-loop-dark .cm-attribute,
+.cm-s-loop-dark .cm-equals {
+  color: #977575;
 }
 .cm-s-loop-dark .CodeMirror-lint-message-error,
 .cm-s-loop-dark .CodeMirror-lint-message-warning,
@@ -149,15 +141,15 @@
   color: #000;
   font-weight: 500;
 }
-.cm-s-loop-light .cm-tag,
-.cm-s-loop-light .cm-attribute,
-.cm-s-loop-light .cm-equals {
+.cm-s-loop-light .cm-tag {
   color: #54a6ff;
 }
-.cm-s-loop-light .cm-tag.cm-head,
-.cm-s-loop-light .cm-attribute.cm-head,
-.cm-s-loop-light .cm-equals.cm-head {
+.cm-s-loop-light .cm-tag.cm-head {
   color: #888;
+}
+.cm-s-loop-light .cm-attribute,
+.cm-s-loop-light .cm-equals {
+  color: #808080;
 }
 .cm-s-loop-light .cm-comment {
   color: #aaa;
@@ -183,6 +175,27 @@
   0% {
     color: #00f;
   }
+}
+.CodeMirror pre.ind-0,
+.CodeMirror pre.ind-1 {
+  background: transparent;
+}
+.CodeMirror pre.ind-2,
+.CodeMirror pre.ind-3 {
+  background: url("indents/ind1.png") repeat-y;
+  background-position: top left 4px;
+}
+.CodeMirror pre.ind-4,
+.CodeMirror pre.ind-5 {
+  background-image: url("indents/ind1.png"), url("indents/ind1.png");
+  background-position: top left 4px, top left 18px;
+  background-repeat: repeat-y;
+}
+.CodeMirror pre.ind-6,
+.CodeMirror pre.ind-7 {
+  background-image: url("indents/ind1.png"), url("indents/ind1.png"), url("indents/ind1.png");
+  background-position: top left 4px, top left 18px, top left 30px;
+  background-repeat: repeat-y;
 }
 .slider {
   display: inline-block;

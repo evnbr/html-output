@@ -163,7 +163,7 @@ function traverseAndReturn(obj) {
 				var args = stck[j].arguments;
 				var parsedargs = [];
 				for (var k = 0; k < args.length; k++) {
-					var regen = escodegen.generate(args[k]).replace(/\s/g,"");
+					var regen = escodegen.generate(args[k]).replace(/\s/g," ");
 					// Replace newlines for the sake of logging
 					// right now
 					parsedargs.push(regen);
@@ -172,8 +172,9 @@ function traverseAndReturn(obj) {
 			}
 		}
 
-		str += "    " + members.join("\n    ") + "\n";
-		str += "      " + values.join("\n      ");
+		for (var j = 0; j < members.length; j++) {
+			str += "  " + members[j] + " | " + values[j] + "\n";
+		}
 		console.log(str);
 		console.log(stck);
 	}
@@ -225,4 +226,4 @@ function parse(delay, idstring) {
         parseId = undefined;
     }, delay || 811);
 }		
-parse(0, "code2");
+parse(0, "code1");

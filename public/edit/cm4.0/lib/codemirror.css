@@ -59,7 +59,7 @@ div.CodeMirror-overwrite div.CodeMirror-cursor {}
 
 .cm-tab {
   display: inline-block;
-  box-shadow: inset 1px 0 0 0 #ddd;
+  /*box-shadow: inset 1px 0 0 0 #ddd;*/
 }
 
 .CodeMirror-ruler {
